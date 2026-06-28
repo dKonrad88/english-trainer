@@ -17,18 +17,18 @@
   :root{
     --azul-1:#0d3d6b; --azul-2:#185FA5; --azul-3:#1a7a8a;
     --bg:#ededea; --card:#ffffff; --txt:#1d2733; --txt-soft:#5b6b7d;
-    --linha:#e2e6ea; --ok:#1f9d63; --erro:#d2533f; --sombra:0 6px 22px rgba(13,61,107,.10);
-    --radius:16px;
+    --linha:#e2e6ea; --ok:#1f9d63; --erro:#d2533f; --sombra:0 1px 2px rgba(13,61,107,.06);
+    --radius:14px;
   }
   [data-theme="dark"]{
     --bg:#0e1620; --card:#16222e; --txt:#e9eef3; --txt-soft:#9fb1c2;
-    --linha:#243443; --sombra:0 6px 22px rgba(0,0,0,.4);
+    --linha:#243443; --sombra:0 1px 2px rgba(0,0,0,.28);
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Inter',-apple-system,system-ui,sans-serif;
+  body{font-family:'Inter',sans-serif;
     background:var(--bg);color:var(--txt);line-height:1.55;-webkit-font-smoothing:antialiased;
     transition:background .25s,color .25s;-webkit-text-size-adjust:100%}
-  header{background:linear-gradient(120deg,var(--azul-1),var(--azul-2),var(--azul-3));
+  header{background:linear-gradient(135deg,#0d3d6b,#185FA5 55%,#1a7a8a);
     color:#fff;padding:20px 18px 24px;width:100%}
   .head-in{max-width:780px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
   header h1{font-size:1.2rem;font-weight:700;letter-spacing:-.3px}
@@ -42,7 +42,7 @@
   .theme-btn{background:rgba(255,255,255,.16);border:none;color:#fff;width:38px;height:38px;border-radius:11px;font-size:1.05rem;cursor:pointer;flex-shrink:0;transition:background .2s}
   .theme-btn:hover{background:rgba(255,255,255,.28)}
   main{max-width:780px;margin:0 auto;padding:20px 16px 60px}
-  .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--sombra);padding:22px 20px;margin-bottom:16px}
+  .card{background:var(--card);border:1px solid var(--linha);border-radius:var(--radius);box-shadow:var(--sombra);padding:22px 20px;margin-bottom:16px}
   .progress-wrap{height:8px;background:var(--linha);border-radius:99px;overflow:hidden;margin:16px 0 6px}
   .progress-bar{height:100%;background:linear-gradient(90deg,var(--azul-2),var(--azul-3));width:0;transition:width .35s ease;border-radius:99px}
   .meta{display:flex;justify-content:space-between;font-size:.8rem;color:var(--txt-soft);margin-bottom:4px}
@@ -53,7 +53,7 @@
   .profile-h{font-size:1.4rem;font-weight:700;margin-bottom:6px;letter-spacing:-.4px;text-align:center}
   .profile-sub{text-align:center;color:var(--txt-soft);font-size:.92rem;margin-bottom:20px}
   .profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .profile-card{background:var(--card);border:2px solid var(--linha);border-radius:var(--radius);padding:22px 14px;text-align:center;cursor:pointer;transition:all .18s}
+  .profile-card{background:var(--card);border:1px solid var(--linha);border-radius:var(--radius);padding:22px 14px;text-align:center;cursor:pointer;transition:all .18s}
   .profile-card:hover{transform:translateY(-3px);box-shadow:var(--sombra)}
   .profile-card .av{width:58px;height:58px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:#fff}
   .profile-card .pn{font-weight:700;font-size:1.05rem}
@@ -198,7 +198,7 @@
     <p class="profile-sub">Cada um tem nível, biblioteca e agenda próprios.</p>
     <div class="profile-grid">
       <div class="profile-card" onclick="selectProfile('diego')"><div class="av" style="background:#185FA5">🏃</div><div class="pn">Diego</div><div class="ps" id="psDiego"></div></div>
-      <div class="profile-card" onclick="selectProfile('debora')"><div class="av" style="background:#9b5de5">💜</div><div class="pn">Débora</div><div class="ps" id="psDebora"></div></div>
+      <div class="profile-card" onclick="selectProfile('debora')"><div class="av" style="background:#1a7a8a">💜</div><div class="pn">Débora</div><div class="ps" id="psDebora"></div></div>
     </div>
     <div id="authbar" style="margin-top:18px;border-top:1px solid var(--linha);padding-top:14px"></div>
   </section>
@@ -259,7 +259,7 @@ setTheme(localStorage.getItem('et_theme')||'dark');
 themeBtn.onclick=()=>setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');
 
 /* ===== PERFIS / DADOS ===== */
-const PROFILES={diego:{name:'Diego',color:'#185FA5',emoji:'🏃',lvl:'B2'},debora:{name:'Débora',color:'#9b5de5',emoji:'💜',lvl:'C2'}};
+const PROFILES={diego:{name:'Diego',color:'#185FA5',emoji:'🏃',lvl:'B2'},debora:{name:'Débora',color:'#1a7a8a',emoji:'💜',lvl:'C2'}};
 const LEVELS=['B2','C1','C2'];
 let currentUser=null,S=null,T=null;
 const byId={};ITEMS.forEach(it=>byId[it.id]=it);
