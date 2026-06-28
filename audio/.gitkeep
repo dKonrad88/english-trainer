@@ -1,0 +1,3 @@
+# Os MP3 neurais gerados por tools/generate-audio.py ficam aqui.
+# Nomes: <itemId>__<indiceDoExemplo>__<voiceProfile>.mp3
+# Ex.: steep-learning-curve__0__uk_female.mp3

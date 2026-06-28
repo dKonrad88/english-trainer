@@ -1,0 +1,792 @@
+[
+ {
+  "file": "shopping-0__0__us_female.mp3",
+  "text": "Just bring everything to the counter and I'll ring it up for you.",
+  "voice": "us_female"
+ },
+ {
+  "file": "shopping-0__1__us_male.mp3",
+  "text": "She rang up my two T-shirts and the total came to forty bucks.",
+  "voice": "us_male"
+ },
+ {
+  "file": "shopping-1__0__uk_female.mp3",
+  "text": "Can I try these jeans on before I buy them? The sizing here runs small.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "shopping-1__1__us_male.mp3",
+  "text": "Go ahead and try it on, the fitting room's just past the shoes.",
+  "voice": "us_male"
+ },
+ {
+  "file": "shopping-2__0__uk_male.mp3",
+  "text": "If the shoes don't fit, you can bring them back for a full refund within thirty days.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "shopping-2__1__us_female.mp3",
+  "text": "I returned the jacket with the tags on and got a full refund, no questions asked.",
+  "voice": "us_female"
+ },
+ {
+  "file": "shopping-3__0__us_male.mp3",
+  "text": "Forty dollars for genuine leather boots? Honestly, that's a steal.",
+  "voice": "us_male"
+ },
+ {
+  "file": "shopping-3__1__uk_female.mp3",
+  "text": "I picked up this dress at the outlet for next to nothing, an absolute steal.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "shopping-4__0__us_male.mp3",
+  "text": "At a flea market you can haggle over the price, but in the mall the price is the price.",
+  "voice": "us_male"
+ },
+ {
+  "file": "shopping-4__1__uk_male.mp3",
+  "text": "He haggled with the vendor over a leather belt and knocked ten bucks off.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "shopping-5__0__uk_female.mp3",
+  "text": "I usually budget carefully, but I splurged on a designer handbag at the outlet.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "shopping-5__1__us_female.mp3",
+  "text": "We're on vacation, so go ahead and splurge on those sneakers, you deserve it.",
+  "voice": "us_female"
+ },
+ {
+  "file": "shopping-6__0__us_female.mp3",
+  "text": "We got there late and the clearance section was completely picked over, nothing in my size.",
+  "voice": "us_female"
+ },
+ {
+  "file": "shopping-6__1__uk_male.mp3",
+  "text": "By the last day of the sale, the good stuff's always picked over, you're left with odd sizes.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "shopping-7__0__us_male.mp3",
+  "text": "I told myself I'd save my vacation money, but it's burning a hole in my pocket at these outlets.",
+  "voice": "us_male"
+ },
+ {
+  "file": "shopping-7__1__uk_female.mp3",
+  "text": "She had her Christmas bonus burning a hole in her pocket, so off to the mall she went.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "shopping-8__0__us_female.mp3",
+  "text": "I scored an amazing bargain on a winter coat, fifty percent off plus an extra coupon.",
+  "voice": "us_female"
+ },
+ {
+  "file": "shopping-8__1__uk_male.mp3",
+  "text": "If you hit the outlets early, you can really score some bargains before the crowds arrive.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "hotel-0__0__us_male.mp3",
+  "text": "We can't check in until three, so let's drop the bags and hit the parks first.",
+  "voice": "us_male"
+ },
+ {
+  "file": "hotel-0__1__us_female.mp3",
+  "text": "Check-out's at eleven, but I called the front desk and they gave us a late one till one.",
+  "voice": "us_female"
+ },
+ {
+  "file": "hotel-1__0__us_female.mp3",
+  "text": "Just leave the request for extra towels with the front desk and they'll send some up.",
+  "voice": "us_female"
+ },
+ {
+  "file": "hotel-1__1__us_male.mp3",
+  "text": "If the safe won't open, call the front desk and someone'll come reset it.",
+  "voice": "us_male"
+ },
+ {
+  "file": "hotel-2__0__uk_female.mp3",
+  "text": "We splurged on a room with a view so we could catch the fireworks from the balcony.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "hotel-2__1__us_male.mp3",
+  "text": "Any chance of a room with a view of the park? We're celebrating an anniversary.",
+  "voice": "us_male"
+ },
+ {
+  "file": "hotel-3__0__us_female.mp3",
+  "text": "Sorry, we're all booked up this weekend — there's a big convention in town.",
+  "voice": "us_female"
+ },
+ {
+  "file": "hotel-3__1__uk_male.mp3",
+  "text": "I tried three hotels on I-Drive and they were all booked up, so book early next time.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "hotel-4__0__us_male.mp3",
+  "text": "Because the AC broke, the manager comped us a night and threw in free parking.",
+  "voice": "us_male"
+ },
+ {
+  "file": "hotel-4__1__us_female.mp3",
+  "text": "They felt bad about the wait, so they comped our drinks at the pool bar.",
+  "voice": "us_female"
+ },
+ {
+  "file": "hotel-5__0__uk_male.mp3",
+  "text": "Give the new system a week to iron out the kinks before you judge the place.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "hotel-5__1__us_female.mp3",
+  "text": "There were a couple of billing mix-ups at check-in, but the manager ironed out the kinks fast.",
+  "voice": "us_female"
+ },
+ {
+  "file": "hotel-6__0__us_female.mp3",
+  "text": "If you book direct, we'll throw in free parking and a late check-out.",
+  "voice": "us_female"
+ },
+ {
+  "file": "hotel-6__1__uk_female.mp3",
+  "text": "I asked nicely and they threw in two water-park tickets with the room.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "hotel-7__0__us_male.mp3",
+  "text": "Between the resort fee and the parking, these Orlando hotels really nickel-and-dime you.",
+  "voice": "us_male"
+ },
+ {
+  "file": "hotel-7__1__us_female.mp3",
+  "text": "I hate getting nickel-and-dimed for Wi-Fi when the room already costs a fortune.",
+  "voice": "us_female"
+ },
+ {
+  "file": "hotel-8__0__us_female.mp3",
+  "text": "The photos online looked great, but the room was a total dump — mold in the bathroom and all.",
+  "voice": "us_female"
+ },
+ {
+  "file": "hotel-8__1__uk_male.mp3",
+  "text": "For that price I expected better; honestly, the place was a bit of a dump.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "hotel-9__0__us_female.mp3",
+  "text": "We mentioned it was our honeymoon and they rolled out the red carpet — champagne, room upgrade, the works.",
+  "voice": "us_female"
+ },
+ {
+  "file": "hotel-9__1__uk_female.mp3",
+  "text": "The resort really rolled out the red carpet for the kids; they got a welcome basket at check-in.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "dining-0__0__us_female.mp3",
+  "text": "Hi, do you have a table for two? We don't have a reservation.",
+  "voice": "us_female"
+ },
+ {
+  "file": "dining-0__1__uk_male.mp3",
+  "text": "I called ahead and booked a table for four under the name Diego.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "dining-1__0__us_male.mp3",
+  "text": "Are you guys ready to order, or do you need another minute?",
+  "voice": "us_male"
+ },
+ {
+  "file": "dining-1__1__uk_female.mp3",
+  "text": "We're not quite ready to order yet — could you give us a couple of minutes?",
+  "voice": "uk_female"
+ },
+ {
+  "file": "dining-2__0__us_female.mp3",
+  "text": "We're really sorry about the wait — dessert's on the house tonight.",
+  "voice": "us_female"
+ },
+ {
+  "file": "dining-2__1__uk_male.mp3",
+  "text": "The manager said the first round of drinks would be on the house.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "dining-3__0__us_male.mp3",
+  "text": "We tried that steakhouse on I-Drive, but it was packed — a two-hour wait.",
+  "voice": "us_male"
+ },
+ {
+  "file": "dining-3__1__uk_female.mp3",
+  "text": "Get there early; by eight the place is absolutely packed.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "dining-4__0__uk_female.mp3",
+  "text": "Just to check — does the pad thai have peanuts? My son's allergic to nuts.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "dining-4__1__us_female.mp3",
+  "text": "I'm allergic to shellfish, so I need to make sure there's no shrimp in the broth.",
+  "voice": "us_female"
+ },
+ {
+  "file": "dining-5__0__us_male.mp3",
+  "text": "My steak came out well done, not medium-rare, so I had to send it back.",
+  "voice": "us_male"
+ },
+ {
+  "file": "dining-5__1__uk_male.mp3",
+  "text": "I don't like to make a fuss, but this soup is stone cold — could we send it back?",
+  "voice": "uk_male"
+ },
+ {
+  "file": "dining-6__0__us_female.mp3",
+  "text": "Whenever you're ready, could we get the check, please? No rush.",
+  "voice": "us_female"
+ },
+ {
+  "file": "dining-6__1__uk_female.mp3",
+  "text": "Sorry to bother you — could we get the bill when you have a sec?",
+  "voice": "uk_female"
+ },
+ {
+  "file": "dining-7__0__us_male.mp3",
+  "text": "Don't worry about working out who had what — let's just split the bill four ways.",
+  "voice": "us_male"
+ },
+ {
+  "file": "dining-7__1__uk_female.mp3",
+  "text": "Shall we split it, or do you want separate checks?",
+  "voice": "uk_female"
+ },
+ {
+  "file": "dining-8__0__us_male.mp3",
+  "text": "Fifteen bucks for a bottle of water? That's a bit of a rip-off, if you ask me.",
+  "voice": "us_male"
+ },
+ {
+  "file": "dining-8__1__uk_male.mp3",
+  "text": "The food was lovely, but twelve quid for a side salad? Total rip-off.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "dining-9__0__us_female.mp3",
+  "text": "I ordered the full rack of ribs and a starter — my eyes were definitely bigger than my stomach.",
+  "voice": "us_female"
+ },
+ {
+  "file": "dining-9__1__uk_female.mp3",
+  "text": "You'll never finish all that. Eyes bigger than your stomach, as usual!",
+  "voice": "uk_female"
+ },
+ {
+  "file": "parks-0__0__us_female.mp3",
+  "text": "We got there at opening but the place was already packed.",
+  "voice": "us_female"
+ },
+ {
+  "file": "parks-0__1__uk_male.mp3",
+  "text": "Honestly, don't go on a Saturday — the park gets absolutely packed.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "parks-1__0__us_male.mp3",
+  "text": "We're doing rope drop tomorrow to beat the crowds at Space Mountain.",
+  "voice": "us_male"
+ },
+ {
+  "file": "parks-1__1__uk_female.mp3",
+  "text": "If you want to beat the crowds, get to the gate before they even open.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "parks-2__0__us_female.mp3",
+  "text": "People started lining up for the new ride two hours before it opened.",
+  "voice": "us_female"
+ },
+ {
+  "file": "parks-2__1__us_male.mp3",
+  "text": "Do we line up over here, or is there a separate entrance for the fast lane?",
+  "voice": "us_male"
+ },
+ {
+  "file": "parks-3__0__uk_male.mp3",
+  "text": "Avoid Main Street right before the fireworks — it's an absolute zoo.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "parks-3__1__us_female.mp3",
+  "text": "The line for the bathrooms was a total zoo after the parade let out.",
+  "voice": "us_female"
+ },
+ {
+  "file": "parks-4__0__us_male.mp3",
+  "text": "Sorry, buddy — he doesn't quite meet the height requirement for this one yet.",
+  "voice": "us_male"
+ },
+ {
+  "file": "parks-4__1__uk_female.mp3",
+  "text": "Check the sign first; some of these rides have a strict height requirement.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "parks-5__0__us_female.mp3",
+  "text": "We don't usually do this, but we splurged on the front-row seats for the show.",
+  "voice": "us_female"
+ },
+ {
+  "file": "parks-5__1__uk_male.mp3",
+  "text": "Go on, splurge on the Genie+ — it'll save you hours of waiting.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "parks-6__0__us_male.mp3",
+  "text": "Twelve bucks for a bottle of water? That's a total rip-off.",
+  "voice": "us_male"
+ },
+ {
+  "file": "parks-6__1__uk_female.mp3",
+  "text": "The popcorn bucket's a bit of a rip-off, but the kids love the design.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "parks-7__0__uk_female.mp3",
+  "text": "The kids are wiped out — let's grab one more ride and call it a day.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "parks-7__1__us_female.mp3",
+  "text": "My feet are killing me. I think we should call it a day and head back to the hotel.",
+  "voice": "us_female"
+ },
+ {
+  "file": "parks-8__0__us_male.mp3",
+  "text": "We paid extra to skip the lines and honestly it was worth every penny.",
+  "voice": "us_male"
+ },
+ {
+  "file": "parks-8__1__uk_male.mp3",
+  "text": "Pricey? Yeah. But that view from the top of the ride was worth every penny.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "parks-9__0__us_female.mp3",
+  "text": "After twelve hours of walking, we were absolutely wiped out.",
+  "voice": "us_female"
+ },
+ {
+  "file": "parks-9__1__uk_female.mp3",
+  "text": "The little one was dead on his feet by the time the fireworks started.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "transport-0__0__us_female.mp3",
+  "text": "The driver said he'll pick us up at door three in the arrivals hall.",
+  "voice": "us_female"
+ },
+ {
+  "file": "transport-0__1__us_male.mp3",
+  "text": "Can you pick me up outside terminal B? I'll be by the rideshare sign.",
+  "voice": "us_male"
+ },
+ {
+  "file": "transport-1__0__uk_female.mp3",
+  "text": "Could you drop me off at the hotel entrance rather than the parking lot?",
+  "voice": "uk_female"
+ },
+ {
+  "file": "transport-1__1__us_female.mp3",
+  "text": "She dropped the kids off at the resort and went to return the rental.",
+  "voice": "us_female"
+ },
+ {
+  "file": "transport-2__0__us_male.mp3",
+  "text": "Let's fill up the tank before we drop the car off, or they'll charge a fortune for gas.",
+  "voice": "us_male"
+ },
+ {
+  "file": "transport-2__1__uk_male.mp3",
+  "text": "I only filled it up halfway because we're returning it this afternoon.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "transport-3__0__us_female.mp3",
+  "text": "Heads up — the inbound flight's running behind, so boarding will be delayed about forty minutes.",
+  "voice": "us_female"
+ },
+ {
+  "file": "transport-3__1__uk_female.mp3",
+  "text": "We're running a bit behind, so let's skip the gas station and just pay the refuelling fee.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "transport-4__0__us_male.mp3",
+  "text": "Read the rental agreement carefully — these companies love to sneak in hidden fees.",
+  "voice": "us_male"
+ },
+ {
+  "file": "transport-4__1__uk_male.mp3",
+  "text": "The base rate looked cheap, but with all the hidden fees it nearly doubled.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "transport-5__0__us_female.mp3",
+  "text": "We got bumped from the morning flight, but they put us up in a hotel and gave us a travel voucher.",
+  "voice": "us_female"
+ },
+ {
+  "file": "transport-5__1__uk_female.mp3",
+  "text": "If it's overbooked, they'll ask for volunteers before they bump anyone involuntarily.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "transport-6__0__us_male.mp3",
+  "text": "Hop in, the trunk's open if you want to throw your bags in the back.",
+  "voice": "us_male"
+ },
+ {
+  "file": "transport-6__1__uk_male.mp3",
+  "text": "We hopped out at the wrong terminal and had to take the shuttle across.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "transport-7__0__us_female.mp3",
+  "text": "We hit traffic on the way back from the parks, so the twenty-minute drive took over an hour.",
+  "voice": "us_female"
+ },
+ {
+  "file": "transport-7__1__us_male.mp3",
+  "text": "Leave early if you can — I-4 gets bumper-to-bumper the second you hit rush hour.",
+  "voice": "us_male"
+ },
+ {
+  "file": "transport-8__0__uk_male.mp3",
+  "text": "If the cab driver won't switch on the meter, he's probably trying to take you for a ride.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "transport-8__1__us_female.mp3",
+  "text": "Three hundred bucks for an airport transfer? They totally took us for a ride.",
+  "voice": "us_female"
+ },
+ {
+  "file": "transport-9__0__us_male.mp3",
+  "text": "The car rental desk? It's just around the corner, past the baggage claim on your right.",
+  "voice": "us_male"
+ },
+ {
+  "file": "transport-9__1__uk_female.mp3",
+  "text": "Don't bother with a cab — the hotel's just around the corner, honestly a five-minute walk.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "sightseeing-0__0__us_female.mp3",
+  "text": "The skip-the-line ticket costs a bit more, but trust me, it's well worth it on a busy day.",
+  "voice": "us_female"
+ },
+ {
+  "file": "sightseeing-0__1__uk_male.mp3",
+  "text": "It's a long drive out to the coast, but the views are well worth it.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "sightseeing-1__0__us_male.mp3",
+  "text": "We got there at noon and the park was absolutely packed — barely room to move.",
+  "voice": "us_male"
+ },
+ {
+  "file": "sightseeing-1__1__uk_female.mp3",
+  "text": "Go early if you can; by lunchtime the place is packed.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "sightseeing-2__0__us_female.mp3",
+  "text": "If we skip the gift shop, I think we can fit in one more ride before closing.",
+  "voice": "us_female"
+ },
+ {
+  "file": "sightseeing-2__1__uk_male.mp3",
+  "text": "There's no way we'll fit it all in one day — let's pick our top three.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "sightseeing-3__0__us_male.mp3",
+  "text": "Forty bucks for a three-park pass? That's an absolute steal.",
+  "voice": "us_male"
+ },
+ {
+  "file": "sightseeing-3__1__uk_female.mp3",
+  "text": "I picked up the annual pass on sale — honestly, it was a steal.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "sightseeing-4__0__us_female.mp3",
+  "text": "My feet are killing me — what do you say we call it a day and grab some dinner?",
+  "voice": "us_female"
+ },
+ {
+  "file": "sightseeing-4__1__uk_male.mp3",
+  "text": "We've done three parks in three days; let's call it a day and head back to the hotel.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "sightseeing-5__0__us_male.mp3",
+  "text": "We paid extra for the express pass so we could skip the line on the big coasters.",
+  "voice": "us_male"
+ },
+ {
+  "file": "sightseeing-5__1__us_female.mp3",
+  "text": "Is there any way to skip the line, or are we stuck waiting two hours?",
+  "voice": "us_female"
+ },
+ {
+  "file": "sightseeing-6__0__us_female.mp3",
+  "text": "If you want something a bit off the beaten path, there's a great little lake just south of the city.",
+  "voice": "us_female"
+ },
+ {
+  "file": "sightseeing-6__1__uk_male.mp3",
+  "text": "We love finding restaurants off the beaten track — way better than the tourist traps.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "sightseeing-7__0__us_male.mp3",
+  "text": "Honestly, that whole strip is a bit of a tourist trap — overpriced and packed.",
+  "voice": "us_male"
+ },
+ {
+  "file": "sightseeing-7__1__uk_female.mp3",
+  "text": "Skip the restaurants right by the entrance; they're total tourist traps.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "sightseeing-8__0__us_female.mp3",
+  "text": "Everyone's all hyped up about the new ride, but honestly the queue isn't worth it.",
+  "voice": "us_female"
+ },
+ {
+  "file": "sightseeing-8__1__us_male.mp3",
+  "text": "I was so hyped up about the night show, and it totally lived up to the hype.",
+  "voice": "us_male"
+ },
+ {
+  "file": "sightseeing-9__0__us_male.mp3",
+  "text": "We don't have a strict plan for the day — we'll just wing it and see what's open.",
+  "voice": "us_male"
+ },
+ {
+  "file": "sightseeing-9__1__uk_female.mp3",
+  "text": "I didn't book anything in advance; I figured we'd wing it once we got there.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "smalltalk-0__0__us_male.mp3",
+  "text": "I made a quick joke about the long lines just to break the ice with the family next to us.",
+  "voice": "us_male"
+ },
+ {
+  "file": "smalltalk-0__1__uk_female.mp3",
+  "text": "Complimenting someone's Disney shirt is an easy way to break the ice while you're queuing.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "smalltalk-1__0__us_female.mp3",
+  "text": "The shuttle driver made small talk about the weather the whole way to the park.",
+  "voice": "us_female"
+ },
+ {
+  "file": "smalltalk-1__1__uk_male.mp3",
+  "text": "I'm rubbish at making small talk, so meeting new people on holiday stresses me out.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "smalltalk-2__0__us_male.mp3",
+  "text": "We hit it off with another couple by the pool and ended up having dinner together.",
+  "voice": "us_male"
+ },
+ {
+  "file": "smalltalk-2__1__uk_female.mp3",
+  "text": "My daughter hit it off with a kid in the line and now they're best mates.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "smalltalk-3__0__us_female.mp3",
+  "text": "Hey, do you want to grab a bite before the fireworks start?",
+  "voice": "us_female"
+ },
+ {
+  "file": "smalltalk-3__1__us_male.mp3",
+  "text": "We were starving, so we grabbed a bite at one of the food trucks near the entrance.",
+  "voice": "us_male"
+ },
+ {
+  "file": "smalltalk-4__0__us_male.mp3",
+  "text": "I'd love to join you for drinks, but I'm exhausted. Can I take a rain check?",
+  "voice": "us_male"
+ },
+ {
+  "file": "smalltalk-4__1__uk_female.mp3",
+  "text": "We had to take a rain check on the boat tour because the kids were sunburned.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "smalltalk-5__0__uk_male.mp3",
+  "text": "It was great running into you. Let's catch up properly over coffee tomorrow.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "smalltalk-5__1__us_female.mp3",
+  "text": "We sat by the pool and caught up with the friends we'd made earlier in the week.",
+  "voice": "us_female"
+ },
+ {
+  "file": "smalltalk-6__0__us_male.mp3",
+  "text": "We were totally on the same wavelength about skipping the crowds and going early.",
+  "voice": "us_male"
+ },
+ {
+  "file": "smalltalk-6__1__uk_female.mp3",
+  "text": "I knew we'd get along — we were on the same wavelength from the first minute.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "smalltalk-7__0__us_female.mp3",
+  "text": "You guys want to check out that rooftop bar later? — Yeah, I'm totally down.",
+  "voice": "us_female"
+ },
+ {
+  "file": "smalltalk-7__1__us_male.mp3",
+  "text": "If you're down for an early start, we can beat the lines at Universal.",
+  "voice": "us_male"
+ },
+ {
+  "file": "smalltalk-8__0__us_male.mp3",
+  "text": "We just sat on the porch shooting the breeze with the hotel owner for an hour.",
+  "voice": "us_male"
+ },
+ {
+  "file": "smalltalk-8__1__us_female.mp3",
+  "text": "He's the kind of bartender who'll happily shoot the breeze with you all night.",
+  "voice": "us_female"
+ },
+ {
+  "file": "smalltalk-9__0__us_female.mp3",
+  "text": "No offense, but the food at that park restaurant was seriously overpriced.",
+  "voice": "us_female"
+ },
+ {
+  "file": "smalltalk-9__1__uk_male.mp3",
+  "text": "No offense, but you look like you could use a nap before tonight!",
+  "voice": "uk_male"
+ },
+ {
+  "file": "health-0__0__uk_female.mp3",
+  "text": "I've been feeling a bit off-colour since the flight, so I might give the park a miss today.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "health-0__1__uk_male.mp3",
+  "text": "She seemed a bit off-colour at breakfast, so we found a pharmacy before heading to Disney.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "health-1__0__us_female.mp3",
+  "text": "I think I'm coming down with something — could you point me to the cold and flu aisle?",
+  "voice": "us_female"
+ },
+ {
+  "file": "health-1__1__uk_male.mp3",
+  "text": "Half the group came down with a stomach bug after that buffet, so we stocked up on meds.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "health-2__0__us_male.mp3",
+  "text": "We stocked up on sunscreen and Advil at the drugstore before the parks — the Orlando sun is no joke.",
+  "voice": "us_male"
+ },
+ {
+  "file": "health-2__1__uk_female.mp3",
+  "text": "Make sure you stock up on bottled water; it's pricey once you're inside the resort.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "health-3__0__us_female.mp3",
+  "text": "I'm feeling a little under the weather — is there a walk-in clinic nearby?",
+  "voice": "us_female"
+ },
+ {
+  "file": "health-3__1__uk_male.mp3",
+  "text": "She's been under the weather all morning, so we swapped the water park for a lazy day.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "health-4__0__us_male.mp3",
+  "text": "Is this an over-the-counter medication, or do I need to see a doctor first?",
+  "voice": "us_male"
+ },
+ {
+  "file": "health-4__1__uk_female.mp3",
+  "text": "You can grab something over-the-counter for the headache — no prescription needed here.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "health-5__0__us_female.mp3",
+  "text": "Finding my lost phone turned into a total wild goose chase between three different lost-and-found desks.",
+  "voice": "us_female"
+ },
+ {
+  "file": "health-5__1__uk_male.mp3",
+  "text": "They sent us on a wild goose chase across the resort before someone finally found the bag.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "health-6__0__uk_female.mp3",
+  "text": "I felt like death warmed up after that red-eye flight — I just needed water and a dark room.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "health-6__1__us_male.mp3",
+  "text": "Honestly, I look like death warmed over, so I'm skipping the parade and finding a pharmacy.",
+  "voice": "us_male"
+ },
+ {
+  "file": "health-7__0__uk_male.mp3",
+  "text": "If anyone finds a navy backpack, has it been handed in to lost and found yet?",
+  "voice": "uk_male"
+ },
+ {
+  "file": "health-7__1__us_female.mp3",
+  "text": "Someone kindly handed my wallet in at guest services — everything was still inside.",
+  "voice": "us_female"
+ },
+ {
+  "file": "health-8__0__us_female.mp3",
+  "text": "Am I covered for emergency dental treatment if something happens while we're in Orlando?",
+  "voice": "us_female"
+ },
+ {
+  "file": "health-8__1__uk_male.mp3",
+  "text": "Check the policy — you might not be covered for anything you do without a helmet.",
+  "voice": "uk_male"
+ },
+ {
+  "file": "health-9__0__uk_female.mp3",
+  "text": "Losing my phone on day one really put a damper on the whole trip for a while.",
+  "voice": "uk_female"
+ },
+ {
+  "file": "health-9__1__us_male.mp3",
+  "text": "A stomach bug put a damper on our last day, but the rest of Orlando was amazing.",
+  "voice": "us_male"
+ }
+]
