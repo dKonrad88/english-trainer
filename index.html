@@ -325,6 +325,7 @@ function renderConfig(){const d=loadData(currentUser);
     '<div class="set-h">🎙️ Voz do app (toque pra escolher · ▶ ouvir)</div><div class="voice-grid" id="voiceGrid"></div>'+
     '<div class="toggle-row"><div><div class="tl">Usar MP3 neural quando disponível</div><div class="td">Cai na voz do sistema enquanto os MP3 não existem.</div></div><div class="sw-toggle" id="mp3Toggle" onclick="toggleMp3()"><div class="dot"></div></div></div>'+
     '<div class="toggle-row"><div><div class="tl">Incluir gírias &amp; expressões</div><div class="td">Desligue pra estudar só o básico (colocações, phrasal verbs).</div></div><div class="sw-toggle" id="exprToggle" onclick="toggleExpr()"><div class="dot"></div></div></div></div>'+
+    '<div class="card"><div class="set-h" style="margin-top:0">📲 App</div><p class="q-context" style="margin:2px 0 12px">Versão instalada: <b>'+(window.APP_BUILD||'—')+'</b>. Toque pra puxar a versão mais nova do servidor (limpa o cache e recarrega).</p><button class="next-btn ghost" onclick="updateApp()">🔄 Atualizar o app</button></div>'+
     '<div class="card"><button class="next-btn" onclick="(function(){show(\'home\');renderHome();})()">Pronto</button></div>';
   const cad=[['daily','Diário'],['every2','A cada 2 dias'],['weekly','Semanal']];
   document.getElementById('segCad').innerHTML=cad.map(c=>'<button class="'+(d.settings.cadence===c[0]?'on':'')+'" data-c="'+c[0]+'">'+c[1]+'</button>').join('');
@@ -716,13 +717,62 @@ async function sbBoot(){if(!sbInit()){renderAuthBar();return;}try{const s=await 
 ET_AUDIO.refresh();refreshProfileLabels();show('profile');sbBoot();
 </script>
 <script>
-/* PWA: registra o service worker (guarda de suporte + try/catch — nunca quebra o app). */
-if ('serviceWorker' in navigator) {
+/* PWA: versão do app, registro do service worker e atualização sob demanda. */
+window.APP_BUILD = '2026.06.28';
+
+(function () {
+  if (!('serviceWorker' in navigator)) return;
   window.addEventListener('load', function () {
     try {
-      navigator.serviceWorker.register('./sw.js').catch(function (e) { console.warn('SW reg falhou', e); });
+      navigator.serviceWorker.register('./sw.js').then(function (reg) {
+        window.__swReg = reg;
+        // Detecta sozinho quando há uma versão nova esperando e oferece atualizar.
+        reg.addEventListener('updatefound', function () {
+          var nw = reg.installing;
+          if (!nw) return;
+          nw.addEventListener('statechange', function () {
+            if (nw.state === 'installed' && navigator.serviceWorker.controller) showUpdateBanner();
+          });
+        });
+      }).catch(function (e) { console.warn('SW reg falhou', e); });
     } catch (e) { console.warn('SW erro', e); }
   });
+})();
+
+// Aviso flutuante "Nova versão disponível" (aparece sozinho quando há update pronto).
+function showUpdateBanner() {
+  if (document.getElementById('updBanner')) return;
+  var b = document.createElement('div');
+  b.id = 'updBanner';
+  b.style.cssText = 'position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:99999;background:var(--card,#fff);color:var(--txt,#1d2733);border:2px solid var(--azul-2,#185FA5);box-shadow:0 10px 34px rgba(0,0,0,.28);border-radius:14px;padding:11px 13px;display:flex;align-items:center;gap:12px;font-family:inherit;max-width:92vw';
+  b.innerHTML = '<span style="font-size:.92rem">✨ Nova versão disponível</span>';
+  var btn = document.createElement('button');
+  btn.textContent = 'Atualizar';
+  btn.style.cssText = 'background:linear-gradient(120deg,var(--azul-1,#0d3d6b),var(--azul-2,#185FA5));color:#fff;border:none;padding:9px 16px;border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0';
+  btn.onclick = function () { updateApp(); };
+  b.appendChild(btn);
+  document.body.appendChild(b);
+}
+
+// Botão "Atualizar o app": checa versão nova, ativa-a se houver, limpa cache e recarrega.
+async function updateApp() {
+  try { if (typeof toast === 'function') toast('Atualizando…'); } catch (e) {}
+  if (!('serviceWorker' in navigator)) { location.reload(); return; }
+  try {
+    var reg = window.__swReg || (await navigator.serviceWorker.getRegistration());
+    if (reg) { try { await reg.update(); } catch (e) {} }
+    if (reg && reg.waiting) {
+      var done = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function () {
+        if (done) return; done = true; location.reload();
+      });
+      reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+      setTimeout(function () { if (!done) { done = true; location.reload(); } }, 1500);
+      return;
+    }
+    if (window.caches) { var keys = await caches.keys(); await Promise.all(keys.map(function (k) { return caches.delete(k); })); }
+    location.reload();
+  } catch (e) { location.reload(); }
 }
 </script>
 </body>

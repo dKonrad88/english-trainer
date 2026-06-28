@@ -12,7 +12,7 @@
      não é cacheada; então offline o áudio normalmente cai no Web Speech do app (degradação ok).
    - Demais GET (CDNs externos: supabase-js, etc.): stale-while-revalidate.
    Suba a versão do CACHE quando quiser forçar limpeza do cache antigo. */
-var CACHE = 'ingles-v1';
+var CACHE = 'ingles-v2';
 var SHELL = ['./', './index.html', './manifest.json',
              './apple-touch-icon.png', './icon-192.png', './icon-512.png',
              './icon-maskable-512.png',
@@ -24,8 +24,15 @@ self.addEventListener('install', function (e) {
     caches.open(CACHE).then(function (c) {
       // add individual tolerante: se 1 recurso falhar, não derruba a instalação inteira.
       return Promise.all(SHELL.map(function (u) { return c.add(u).catch(function () {}); }));
-    }).then(function () { return self.skipWaiting(); })
+    })
+    // NÃO chama skipWaiting aqui: a versão nova fica "esperando" e só assume quando o
+    // usuário toca "Atualizar o app" (evita recarregar a tela de surpresa no meio do uso).
   );
+});
+
+// O app pede a ativação imediata da versão nova (botão/aviso "Atualizar o app").
+self.addEventListener('message', function (e) {
+  if (e.data && e.data.type === 'SKIP_WAITING') self.skipWaiting();
 });
 
 self.addEventListener('activate', function (e) {
