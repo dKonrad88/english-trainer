@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Treino de Inglês — C1/C2</title>
+<meta name="theme-color" content="#185FA5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Inglês">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
 <style>
   :root{
     --azul-1:#0d3d6b; --azul-2:#185FA5; --azul-3:#1a7a8a;
@@ -706,6 +714,16 @@ function renderAuthBar(){const el=document.getElementById('authbar');if(!el)retu
 async function sbBoot(){if(!sbInit()){renderAuthBar();return;}try{const s=await SB.auth.getSession();if(s&&s.data&&s.data.session){SB_USER=s.data.session.user;await sbPull();}}catch(e){}renderAuthBar();}
 
 ET_AUDIO.refresh();refreshProfileLabels();show('profile');sbBoot();
+</script>
+<script>
+/* PWA: registra o service worker (guarda de suporte + try/catch — nunca quebra o app). */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    try {
+      navigator.serviceWorker.register('./sw.js').catch(function (e) { console.warn('SW reg falhou', e); });
+    } catch (e) { console.warn('SW erro', e); }
+  });
+}
 </script>
 </body>
 </html>
