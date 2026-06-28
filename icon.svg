@@ -1,15 +1,60 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#0d3d6b"/>
-      <stop offset="0.55" stop-color="#185FA5"/>
-      <stop offset="1" stop-color="#1a7a8a"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b2c63"/>
+      <stop offset="1" stop-color="#14478c"/>
     </linearGradient>
+    <clipPath id="lp"><path d="M150,372 L500,408 L500,648 L188,684 Z"/></clipPath>
+    <clipPath id="rp"><path d="M524,408 L874,372 L836,684 L524,648 Z"/></clipPath>
   </defs>
+
   <rect width="1024" height="1024" fill="url(#bg)"/>
-  <text x="512" y="560" text-anchor="middle" dominant-baseline="middle"
-        font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="400"
-        letter-spacing="6" fill="#ffffff">ABC</text>
-  <rect x="332" y="688" width="360" height="34" rx="17" fill="#e23b3b"/>
-  <rect x="332" y="688" width="180" height="34" rx="17" fill="#ffffff" opacity="0.92"/>
+
+  <g id="book" transform="translate(512 512) scale(1.10) translate(-512 -512)">
+    <!-- sombra do livro -->
+    <ellipse cx="512" cy="706" rx="346" ry="48" fill="#000000" opacity="0.20"/>
+
+    <!-- PÁGINA ESQUERDA: Union Jack (Reino Unido) -->
+    <g clip-path="url(#lp)">
+      <g transform="translate(150,372) scale(0.58333,0.78)">
+        <rect x="0" y="0" width="600" height="400" fill="#012169"/>
+        <path d="M0,0 L600,400 M600,0 L0,400" stroke="#ffffff" stroke-width="92"/>
+        <path d="M0,0 L600,400 M600,0 L0,400" stroke="#C8102E" stroke-width="34"/>
+        <rect x="250" y="0" width="100" height="400" fill="#ffffff"/>
+        <rect x="0" y="150" width="600" height="100" fill="#ffffff"/>
+        <rect x="260" y="0" width="80" height="400" fill="#C8102E"/>
+        <rect x="0" y="160" width="600" height="80" fill="#C8102E"/>
+      </g>
+    </g>
+
+    <!-- PÁGINA DIREITA: Stars and Stripes (EUA) -->
+    <g clip-path="url(#rp)">
+      <g transform="translate(524,372) scale(0.58333,0.78)">
+        <rect x="0" y="0" width="600" height="400" fill="#ffffff"/>
+        <rect x="0" y="0"      width="600" height="30.77" fill="#B22234"/>
+        <rect x="0" y="61.54"  width="600" height="30.77" fill="#B22234"/>
+        <rect x="0" y="123.08" width="600" height="30.77" fill="#B22234"/>
+        <rect x="0" y="184.62" width="600" height="30.77" fill="#B22234"/>
+        <rect x="0" y="246.15" width="600" height="30.77" fill="#B22234"/>
+        <rect x="0" y="307.69" width="600" height="30.77" fill="#B22234"/>
+        <rect x="0" y="369.23" width="600" height="30.77" fill="#B22234"/>
+        <rect x="0" y="0" width="240" height="215.4" fill="#3C3B6E"/>
+        <g fill="#ffffff">
+          <circle cx="30" cy="30" r="11"/><circle cx="75" cy="30" r="11"/><circle cx="120" cy="30" r="11"/><circle cx="165" cy="30" r="11"/><circle cx="210" cy="30" r="11"/>
+          <circle cx="52" cy="72" r="11"/><circle cx="97" cy="72" r="11"/><circle cx="142" cy="72" r="11"/><circle cx="187" cy="72" r="11"/>
+          <circle cx="30" cy="114" r="11"/><circle cx="75" cy="114" r="11"/><circle cx="120" cy="114" r="11"/><circle cx="165" cy="114" r="11"/><circle cx="210" cy="114" r="11"/>
+          <circle cx="52" cy="156" r="11"/><circle cx="97" cy="156" r="11"/><circle cx="142" cy="156" r="11"/><circle cx="187" cy="156" r="11"/>
+          <circle cx="30" cy="186" r="11"/><circle cx="75" cy="186" r="11"/><circle cx="120" cy="186" r="11"/><circle cx="165" cy="186" r="11"/><circle cx="210" cy="186" r="11"/>
+        </g>
+      </g>
+    </g>
+
+    <!-- margens brancas das páginas -->
+    <path d="M150,372 L500,408 L500,648 L188,684 Z" fill="none" stroke="#ffffff" stroke-width="16" stroke-linejoin="round"/>
+    <path d="M524,408 L874,372 L836,684 L524,648 Z" fill="none" stroke="#ffffff" stroke-width="16" stroke-linejoin="round"/>
+
+    <!-- lombada (vinco central) -->
+    <rect x="499" y="404" width="26" height="248" rx="6" fill="#06204a"/>
+    <rect x="508" y="404" width="8" height="248" rx="4" fill="#0b2c63"/>
+  </g>
 </svg>
