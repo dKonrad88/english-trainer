@@ -132,6 +132,10 @@
   .sess-exit{display:inline-block;margin-top:10px;font-size:.8rem;color:var(--txt-soft);cursor:pointer;text-decoration:underline}
   /* expressões */
   .expr-card{border:1px solid var(--linha);border-radius:12px;padding:14px;margin:10px 0}
+  /* jogo Adivinha a Imagem */
+  .pic-frame{background:#eef3f8;border-radius:18px;width:200px;max-width:64vw;aspect-ratio:1;margin:6px auto 12px;display:flex;align-items:center;justify-content:center;color:var(--azul-2)}
+  .pic-frame svg{width:72%;height:72%}
+  .pic-hintline{font-size:1.35rem;letter-spacing:.16em;font-weight:800;color:var(--azul-2)}
   /* chat / conversa */
   .chat{display:flex;flex-direction:column;gap:10px;margin:8px 0}
   .bubble{max-width:84%;padding:11px 14px;border-radius:16px;font-size:.98rem;position:relative}
@@ -244,6 +248,7 @@
 <script src="data/conversations.js"></script>
 <script src="data/test.js"></script>
 <script src="data/spelling.js"></script>
+<script src="data/pictures.js"></script>
 <script src="engine/srs.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -260,9 +265,14 @@ let currentUser=null,S=null,T=null;
 const byId={};ITEMS.forEach(it=>byId[it.id]=it);
 function bandFor(lvl){if(lvl==='B2')return['B2','C1'];if(lvl==='C1')return['C1','C2'];return['C1','C2'];}
 function dataKey(u){return 'et_data_'+u;}
-function defaultData(u){return {level:PROFILES[u].lvl,band:bandFor(PROFILES[u].lvl),settings:{cadence:'daily',newPerSession:5,maxReview:20,useMp3:true,theme:'mixed',voice:'us_female',includeExpr:true},srs:{},sessions:[],streak:{current:0,longest:0,last:null},tests:[]};}
+function defaultData(u){return {level:PROFILES[u].lvl,band:bandFor(PROFILES[u].lvl),settings:{cadence:'daily',newPerSession:5,maxReview:20,useMp3:true,theme:'mixed',voice:'us_female',includeExpr:true,tripDate:null},srs:{},sessions:[],streak:{current:0,longest:0,last:null},tests:[]};}
 function loadData(u){try{const d=JSON.parse(localStorage.getItem(dataKey(u)));return d?Object.assign(defaultData(u),d):defaultData(u);}catch(e){return defaultData(u);}}
 function saveData(u,o){localStorage.setItem(dataKey(u),JSON.stringify(o));localStorage.setItem('et_ts_'+u,String(Date.now()));sbPush(u,o);}
+/* Reset de progresso: bump RESET_ID p/ forçar recomeço (Diego+Débora). Checado após o sync
+   no sbBoot, então não atropela progresso novo já sincronizado por outro aparelho. */
+const RESET_ID='2026-06-28-fresh';
+function ensureReset(){['diego','debora'].forEach(function(u){const d=loadData(u);if(d.resetId!==RESET_ID){const fresh=defaultData(u);fresh.resetId=RESET_ID;saveData(u,fresh);}});refreshProfileLabels();}
+function resetProgress(){if(!confirm('Recomeçar do zero? Isso apaga o progresso deste perfil (teste, revisões, streak). Não dá pra desfazer.'))return;const u=currentUser;const fresh=defaultData(u);fresh.resetId=RESET_ID;saveData(u,fresh);toast('Progresso zerado. Bom recomeço! ✨');show('home');renderHome();}
 
 function refreshProfileLabels(){['diego','debora'].forEach(u=>{const d=loadData(u);const el=document.getElementById('ps'+u.charAt(0).toUpperCase()+u.slice(1));
   const cards=Object.values(d.srs||{});if(!cards.length){el.textContent='Nível '+d.level+' · começar';return;}
@@ -302,11 +312,12 @@ const REG={formal:'🎩 formal',informal:'😎 informal',slang:'🔥 gíria',neu
 /* ===== HOME ===== */
 function renderHome(){const d=loadData(currentUser);const today=todayISO();const cards=Object.values(d.srs||{});
   const due=dueCount(cards,today);const ms=masteryStats(cards);const tested=d.tests&&d.tests.length;
+  const _trip=d.settings.tripDate;let tripCard='';if(_trip){const _td=daysBetween(today,_trip);const _g='background:linear-gradient(120deg,var(--azul-1),var(--azul-2));color:#fff;text-align:center;padding:14px;font-size:1.04rem';tripCard=_td>0?'<div class="card" style="'+_g+'">✈️ Faltam <b>'+_td+'</b> dia'+(_td>1?'s':'')+' para Orlando</div>':(_td===0?'<div class="card" style="'+_g+'">✈️ <b>É hoje!</b> Boa viagem 🎉</div>':'<div class="card" style="'+_g+'">🎉 <b>Aproveite Orlando!</b></div>');}
   const themeLabel=(d.settings.theme==='mixed')?'Misto':(((THEMES.find(t=>t.key===d.settings.theme))||{}).pt||'Misto');
   const cta=tested
     ?'<button class="cta" onclick="startSession()">▶ Estudar agora<span class="sub">tema: '+themeLabel+' · '+d.settings.newPerSession+' novos + revisão</span></button>'
     :'<button class="cta" onclick="startTest()">📝 Fazer teste de nível<span class="sub">21 questões · calibra sua dificuldade</span></button>';
-  const tiles=[['🎯','Por tipo','escolha o foco','goMenu()'],['📚','Temas',themeLabel,'goThemes()'],
+  const tiles=[['🎯','Por tipo','escolha o foco','goMenu()'],['🖼️','Adivinha','jogo de imagem','startPictureGame()'],['📚','Temas',themeLabel,'goThemes()'],
     tested?['📝','Refazer teste','seu nível','startTest()']:['▶','Estudar','sessão do dia','startSession()'],
     ['📈','Evolução','seu progresso','goEvolution()'],['⚙️','Ajustes','voz, ritmo…','goConfig()']];
   const tileHtml=tiles.map(t=>'<button class="tile" onclick="'+t[3]+'"><div class="tic">'+t[0]+'</div><div class="tl">'+t[1]+'</div><div class="td">'+t[2]+'</div></button>').join('');
@@ -316,7 +327,7 @@ function renderHome(){const d=loadData(currentUser);const today=todayISO();const
     '<div class="hero-stats"><div class="hstat"><div class="n">'+due+'</div><div class="l">revisar hoje</div></div>'+
     '<div class="hstat"><div class="n">🔥 '+((d.streak&&d.streak.current)||0)+'</div><div class="l">streak</div></div>'+
     '<div class="hstat"><div class="n">'+ms.mature+'</div><div class="l">dominados</div></div></div></div>'+
-    cta+'<div class="tile-grid">'+tileHtml+'</div>';}
+    tripCard+cta+'<div class="tile-grid">'+tileHtml+'</div>';}
 function goConfig(){renderConfig();show('config');}
 function renderConfig(){const d=loadData(currentUser);
   document.getElementById('config').innerHTML=
@@ -327,6 +338,8 @@ function renderConfig(){const d=loadData(currentUser);
     '<div class="toggle-row"><div><div class="tl">Usar MP3 neural quando disponível</div><div class="td">Cai na voz do sistema enquanto os MP3 não existem.</div></div><div class="sw-toggle" id="mp3Toggle" onclick="toggleMp3()"><div class="dot"></div></div></div>'+
     '<div class="toggle-row"><div><div class="tl">Incluir gírias &amp; expressões</div><div class="td">Desligue pra estudar só o básico (colocações, phrasal verbs).</div></div><div class="sw-toggle" id="exprToggle" onclick="toggleExpr()"><div class="dot"></div></div></div></div>'+
     '<div class="card"><div class="set-h" style="margin-top:0">📲 App</div><p class="q-context" style="margin:2px 0 12px">Versão instalada: <b>'+(window.APP_BUILD||'—')+'</b>. Toque pra puxar a versão mais nova do servidor (limpa o cache e recarrega).</p><button class="next-btn ghost" onclick="updateApp()">🔄 Atualizar o app</button></div>'+
+    '<div class="card"><div class="set-h" style="margin-top:0">🌴 Viagem a Orlando</div><p class="q-context" style="margin:2px 0 10px">Defina a data pra ver a contagem regressiva na Home.</p><input type="date" id="tripDate" value="'+(d.settings.tripDate||'')+'" style="width:100%;padding:12px;border:2px solid var(--linha);border-radius:11px;background:var(--card);color:var(--txt);font-size:1rem;font-family:inherit"></div>'+
+    '<div class="card"><div class="set-h" style="margin-top:0">♻️ Recomeçar</div><p class="q-context" style="margin:2px 0 10px">Zera o progresso DESTE perfil (teste, revisões, streak) e começa do zero.</p><button class="next-btn ghost" style="color:var(--erro);border-color:var(--erro)" onclick="resetProgress()">Recomeçar do zero</button></div>'+
     '<div class="card"><button class="next-btn" onclick="(function(){show(\'home\');renderHome();})()">Pronto</button></div>';
   const cad=[['daily','Diário'],['every2','A cada 2 dias'],['weekly','Semanal']];
   document.getElementById('segCad').innerHTML=cad.map(c=>'<button class="'+(d.settings.cadence===c[0]?'on':'')+'" data-c="'+c[0]+'">'+c[1]+'</button>').join('');
@@ -340,7 +353,8 @@ function renderConfig(){const d=loadData(currentUser);
   vg.querySelectorAll('.vplay').forEach(b=>b.onclick=(e)=>{e.stopPropagation();ET_AUDIO.speak("Hi! This is your study voice.",b.dataset.p,null);});
   markV();
   document.getElementById('mp3Toggle').classList.toggle('on',!!d.settings.useMp3);
-  document.getElementById('exprToggle').classList.toggle('on',d.settings.includeExpr!==false);}
+  document.getElementById('exprToggle').classList.toggle('on',d.settings.includeExpr!==false);
+  var _tp=document.getElementById('tripDate');if(_tp)_tp.onchange=function(e){var dd=loadData(currentUser);dd.settings.tripDate=e.target.value||null;saveData(currentUser,dd);};}
 function goThemes(){renderThemes();show('themes');}
 function renderThemes(){const d=loadData(currentUser);
   const chips='<button class="chip" data-t="mixed">🎲 Misto</button>'+THEMES.map(t=>'<button class="chip" data-t="'+t.key+'">'+t.pt+'</button>').join('');
@@ -456,7 +470,7 @@ function blockQuiz(){const L=S.items;if(S.sub>=L.length)return nextBlock();updat
 function blockDone(){const today=S.today;let correct=0;const resched=[];
   S.items.forEach(x=>{const ok=x.results.quiz===true;if(ok)correct++;const g=deriveGrade({correct:ok});const u=applyGrade(x.card,g,today);S.data.srs[x.it.id]=u;resched.push({text:x.it.text,days:daysBetween(today,u.due),ok});});
   S.data.sessions.push({date:today,items:S.items.length,correct});
-  const st=S.data.streak||{current:0,longest:0,last:null};if(st.last!==today){st.current=(st.current||0)+1;st.longest=Math.max(st.longest||0,st.current);st.last=today;}S.data.streak=st;
+  const st=S.data.streak||{current:0,longest:0,last:null};if(st.last!==today){if(st.last&&daysBetween(st.last,today)>1){st.current=1;}else{st.current=(st.current||0)+1;}st.longest=Math.max(st.longest||0,st.current);st.last=today;}S.data.streak=st;
   saveData(currentUser,S.data);refreshProfileLabels();const pct=Math.round(correct/S.items.length*100);
   const rows=resched.sort((a,b)=>a.days-b.days).map(r=>'<div class="resched"><span class="rt">'+(r.ok?'✅':'🔁')+' '+r.text+'</span><span class="rd">revejo em '+r.days+'d</span></div>').join('');
   document.getElementById('done').innerHTML='<div class="card"><div class="badge" style="display:block;text-align:center">ESTUDO CONCLUÍDO</div><div class="res-level">'+correct+'/'+S.items.length+'</div><div class="res-sub">'+pct+'% no quiz · 🔥 streak '+st.current+'</div></div>'+
@@ -539,7 +553,7 @@ function toggleExpr(){const d=loadData(currentUser);d.settings.includeExpr=(d.se
 function goMenu(){renderMenu();show('menu');}
 function renderMenu(){
   const d=loadData(currentUser);const inclExpr=d.settings.includeExpr!==false;
-  const modes=[['present','📖','Novas palavras','significado, exemplo e áudio'],['listen','🎧','Escuta','ouvir e entender'],['produce','✍️','Produção','escolher a forma natural'],['conversation','🗣️','Diálogo','mini-conversa do tema'],['trad','🔁','Tradução','escrever EN↔PT'],['spell','🔤','Soletração','ouvir e soletrar']];
+  const modes=[['present','📖','Novas palavras','significado, exemplo e áudio'],['listen','🎧','Escuta','ouvir e entender'],['produce','✍️','Produção','escolher a forma natural'],['conversation','🗣️','Diálogo','mini-conversa do tema'],['trad','🔁','Tradução','escrever EN↔PT'],['spell','🔤','Soletração','ouvir e soletrar'],['picture','🖼️','Adivinha a imagem','ver e escrever o nome']];
   const btns=modes.map(m=>'<button class="next-btn ghost" style="text-align:left;margin-top:8px" data-m="'+m[0]+'">'+m[1]+' <b>'+m[2]+'</b> <span style="color:var(--txt-soft);font-weight:400">— '+m[3]+'</span></button>').join('');
   document.getElementById('menu').innerHTML=
     '<div class="card"><div class="q-text">🎯 Estudar por tipo</div><p class="q-context">Escolha um foco. Usa o <b>tema</b> e o <b>nível</b> atuais.</p>'+
@@ -547,7 +561,7 @@ function renderMenu(){
     '<div class="card">'+btns+'</div>'+
     '<div class="card"><button class="next-btn ghost" onclick="(function(){show(\'home\');renderHome();})()">Voltar</button></div>';
   document.getElementById('exprToggleM').onclick=()=>{const dd=loadData(currentUser);dd.settings.includeExpr=(dd.settings.includeExpr===false);saveData(currentUser,dd);renderMenu();};
-  document.querySelectorAll('#menu [data-m]').forEach(b=>b.onclick=()=>{const m=b.dataset.m;if(m==='trad')return startTransGame();if(m==='spell')return startSpellGame();startMode(m);});
+  document.querySelectorAll('#menu [data-m]').forEach(b=>b.onclick=()=>{const m=b.dataset.m;if(m==='trad')return startTransGame();if(m==='spell')return startSpellGame();if(m==='picture')return startPictureGame();startMode(m);});
 }
 function pickStudyItems(d,n){let pool=poolForStudy(d).filter(it=>d.band.includes(it.cefr));if(d.settings.theme&&d.settings.theme!=='mixed')pool=pool.filter(it=>it.theme===d.settings.theme);return shuffle(pool).slice(0,n).map(it=>({it,card:null,isNew:true,results:{}}));}
 function startMode(mode){const d=loadData(currentUser);const today=todayISO();const items=pickStudyItems(d,8);let conv=null;
@@ -680,6 +694,73 @@ function spellDone(){const pct=Math.round(SP.correct/SP.n*100);
     '<div class="card"><div class="btn-row"><button class="next-btn ghost" onclick="(function(){show(\'home\');renderHome();})()">Voltar</button><button class="next-btn" onclick="startSpellGame()">De novo</button></div></div>';
   SP=null;window.scrollTo({top:0,behavior:'smooth'});}
 
+/* ===== JOGO: ADIVINHA A IMAGEM (produção escrita a partir de ilustração) ===== */
+let PIC=null;
+function startPictureGame(){if(typeof PICTURE_WORDS==='undefined'||!PICTURE_WORDS.length){toast('Imagens não carregaram.');return;}
+  PIC={pool:shuffle(PICTURE_WORDS),i:0,n:Math.min(10,PICTURE_WORDS.length),score:0,correct:0,nohint:0};show('games');renderPicRound();}
+/* distância de Levenshtein (pura) — usada na tolerância ortográfica */
+function lev(a,b){const m=a.length,n=b.length;if(!m)return n;if(!n)return m;const d=[];for(let i=0;i<=m;i++)d[i]=[i];for(let j=0;j<=n;j++)d[0][j]=j;
+  for(let i=1;i<=m;i++)for(let j=1;j<=n;j++){const c=a[i-1]===b[j-1]?0:1;d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+c);}return d[m][n];}
+function picStrip(s){return String(s).toLowerCase().trim().replace(/^(a|an|the)\s+/,'');}        // aceita com/sem artigo
+function picVariants(w){return [w.word].concat(w.accept||[]).map(normW);}
+function picJudge(mine,w){const norm=normW(picStrip(mine));if(!norm)return{status:'empty'};
+  const vs=picVariants(w);if(vs.indexOf(norm)>=0)return{status:'ok'};                            // acerto exato (tolerante)
+  let best=99;vs.forEach(function(v){best=Math.min(best,lev(norm,v));});                          // tolerância ortográfica
+  const len=normW(w.word).length;const thr=len<=5?1:(len<=9?2:3);
+  return best<=thr?{status:'typo'}:{status:'wrong'};}
+function picHintLines(w){return [
+  '<span class="pic-hintline">'+w.word.charAt(0).toUpperCase()+' '+w.word.slice(1).split('').map(function(){return '_';}).join(' ')+'</span>',
+  '🔢 <b>'+w.word.length+' letras</b>',
+  '🇧🇷 <b>'+w.pt+'</b>'+(w.clue_en?' · <span style="color:var(--txt-soft)">'+w.clue_en+'</span>':'')];}
+function renderPicRound(){
+  if(PIC.i>=PIC.n)return picDone();
+  const w=PIC.pool[PIC.i];PIC.w=w;PIC.hint=0;
+  document.getElementById('games').innerHTML=
+    '<div class="meta"><span>🖼️ Adivinha a imagem</span><span>'+(PIC.i+1)+'/'+PIC.n+'</span></div>'+
+    '<div class="progress-wrap"><div class="progress-bar" style="width:'+(PIC.i/PIC.n*100)+'%"></div></div>'+
+    '<div class="card"><div class="q-type">Que objeto é este? Escreva o nome em inglês.</div>'+
+    '<div class="pic-frame"><svg viewBox="0 0 100 100">'+w.svg+'</svg></div>'+
+    '<div style="display:flex;gap:8px;justify-content:center"><button class="audio-btn" id="picPlay"><span class="ic">🔊</span> Ouvir</button><button class="audio-btn" id="picSlow" style="background:rgba(24,95,165,.14);color:var(--azul-2)"><span class="ic">🐢</span> Devagar</button></div>'+
+    '<input id="picIn" autocapitalize="off" autocorrect="off" spellcheck="false" style="width:100%;margin-top:12px;padding:13px;border:2px solid var(--linha);border-radius:12px;background:var(--card);color:var(--txt);font-size:1.1rem;font-family:inherit" placeholder="escreva em inglês...">'+
+    '<div id="picHints"></div>'+
+    '<div class="btn-row" style="margin-top:14px"><button class="next-btn ghost" id="picHintBtn">💡 Dica</button><button class="next-btn" id="picCheckBtn">Conferir</button></div>'+
+    '<div id="picFb"></div></div>';
+  document.getElementById('picPlay').onclick=function(){ET_AUDIO.speak(w.word,appVoice(),null);};
+  document.getElementById('picSlow').onclick=function(){ET_AUDIO.speakWeb(w.word,appVoice(),0.5);};
+  const inp=document.getElementById('picIn');inp.focus();
+  inp.addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('picCheckBtn').click();});
+  document.getElementById('picCheckBtn').onclick=function(){picCheck(false);};
+  document.getElementById('picHintBtn').onclick=picHint;}
+function picHint(){const w=PIC.w;const hints=picHintLines(w);PIC.hint=Math.min(PIC.hint+1,hints.length);
+  document.getElementById('picHints').innerHTML=hints.slice(0,PIC.hint).map(function(h){return '<div class="nuance" style="margin:10px 0 0">'+h+'</div>';}).join('');
+  const hb=document.getElementById('picHintBtn');if(PIC.hint>=hints.length){hb.textContent='👁 Revelar';hb.onclick=function(){picCheck(true);};}}
+function picCheck(revealed){
+  const w=PIC.w;const mine=document.getElementById('picIn').value;
+  const res=revealed?{status:'reveal'}:picJudge(mine,w);
+  if(res.status==='empty'){toast('Escreva o nome em inglês (ou use 💡 Dica).');return;}
+  document.getElementById('picIn').setAttribute('readonly','');
+  document.getElementById('picCheckBtn').style.display='none';
+  const hb=document.getElementById('picHintBtn');if(hb)hb.style.display='none';
+  const base=[100,70,50,30][PIC.hint]||0;let pts=0,head='';
+  if(res.status==='ok'){pts=base;PIC.correct++;if(PIC.hint===0)PIC.nohint++;head='<b style="color:var(--ok)">✓ Isso!</b>'+(PIC.hint===0?' <span style="color:var(--ok)">sem dica! 🎯</span>':'');}
+  else if(res.status==='typo'){pts=Math.min(base,80);PIC.correct++;if(PIC.hint===0)PIC.nohint++;head='<b style="color:var(--ok)">✓ Quase!</b> A grafia certa é <b>'+w.word+'</b> — você escreveu “<i>'+mine+'</i>”.';}
+  else if(res.status==='reveal'){head='<b style="color:var(--azul-2)">A resposta era:</b>';}
+  else{head='<b style="color:var(--erro)">✗ Não foi</b> — você escreveu “<i>'+(mine||'—')+'</i>”.';}
+  PIC.score+=pts;
+  document.getElementById('picFb').innerHTML=
+    '<div class="nuance">'+head+
+    '<div class="item-term" style="font-size:1.5rem;margin:8px 0 2px">'+(w.article?'<span style="color:var(--txt-soft)">'+w.article+'</span> ':'')+w.word+'</div>'+
+    '<div style="color:var(--txt-soft);font-size:.86rem">🇧🇷 '+w.pt+(pts?' · <b style="color:var(--azul-2)">+'+pts+'</b>':'')+'</div>'+
+    '<div style="margin-top:8px"><button class="audio-btn" id="picReplay"><span class="ic">🔊</span> Ouvir a pronúncia</button></div></div>'+
+    '<button class="next-btn" id="picNext">'+(PIC.i<PIC.n-1?'Próxima':'Ver resultado')+'</button>';
+  document.getElementById('picReplay').onclick=function(){ET_AUDIO.speak(w.word,appVoice(),null);};
+  document.getElementById('picNext').onclick=function(){PIC.i++;renderPicRound();};}
+function picDone(){const max=PIC.n*100;const pct=Math.round(PIC.score/max*100);
+  document.getElementById('games').innerHTML=
+    '<div class="card"><div class="badge" style="display:block;text-align:center">ADIVINHA A IMAGEM</div><div class="res-level">'+PIC.score+'</div><div class="res-sub">'+PIC.correct+'/'+PIC.n+' certas · '+PIC.nohint+' sem dica · '+pct+'%</div></div>'+
+    '<div class="card"><div class="btn-row"><button class="next-btn ghost" onclick="(function(){show(\'home\');renderHome();})()">Voltar</button><button class="next-btn" onclick="startPictureGame()">De novo</button></div></div>';
+  PIC=null;window.scrollTo({top:0,behavior:'smooth'});}
+
 /* ===== BOOT ===== */
 document.getElementById('sessBody').addEventListener('click',function(e){
   if(e.target.classList.contains('tr-toggle')){const tx=e.target.parentElement.querySelector('.tr-text');if(tx)tx.classList.remove('hidden');e.target.classList.add('hidden');}
@@ -713,7 +794,7 @@ function renderAuthBar(){const el=document.getElementById('authbar');if(!el)retu
   else{el.innerHTML='<div style="font-size:.86rem;font-weight:700;margin-bottom:2px">🔄 Sincronizar Mac ↔ celular</div><div style="font-size:.78rem;color:var(--txt-soft);margin-bottom:10px">Receba um link no e-mail (sem senha). Opcional — sem login, o progresso fica só neste aparelho.</div>'+
     '<input id="auEmail" type="email" autocapitalize="off" autocorrect="off" placeholder="seu e-mail" style="width:100%;padding:12px;border:2px solid var(--linha);border-radius:11px;background:var(--card);color:var(--txt);font-size:.98rem;font-family:inherit;margin-bottom:10px">'+
     '<button class="next-btn" id="auBtn" onclick="sbLogin()">Enviar link de acesso</button>';}}
-async function sbBoot(){if(!sbInit()){renderAuthBar();return;}try{const s=await SB.auth.getSession();if(s&&s.data&&s.data.session){SB_USER=s.data.session.user;await sbPull();}}catch(e){}renderAuthBar();}
+async function sbBoot(){if(!sbInit()){ensureReset();renderAuthBar();return;}try{const s=await SB.auth.getSession();if(s&&s.data&&s.data.session){SB_USER=s.data.session.user;await sbPull();}}catch(e){}ensureReset();renderAuthBar();}
 
 ET_AUDIO.refresh();refreshProfileLabels();show('profile');sbBoot();
 </script>

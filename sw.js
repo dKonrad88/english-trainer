@@ -12,12 +12,12 @@
      não é cacheada; então offline o áudio normalmente cai no Web Speech do app (degradação ok).
    - Demais GET (CDNs externos: supabase-js, etc.): stale-while-revalidate.
    Suba a versão do CACHE quando quiser forçar limpeza do cache antigo. */
-var CACHE = 'ingles-v2';
+var CACHE = 'ingles-v3';
 var SHELL = ['./', './index.html', './manifest.json',
              './apple-touch-icon.png', './icon-192.png', './icon-512.png',
              './icon-maskable-512.png',
              './data/content.js', './data/conversations.js', './data/test.js',
-             './data/spelling.js', './engine/srs.js'];
+             './data/spelling.js', './data/pictures.js', './engine/srs.js'];
 
 self.addEventListener('install', function (e) {
   e.waitUntil(
