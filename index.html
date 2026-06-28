@@ -779,21 +779,23 @@ async function sbPull(){if(!SB||!SB_USER)return;
     if(r){const rt=Date.parse(r.updated_at);if(rt>lt){localStorage.setItem(dataKey(u),JSON.stringify(r.data));localStorage.setItem('et_ts_'+u,String(rt));}else if(raw&&lt>rt){sbPush(u,JSON.parse(raw));}}
     else if(raw){sbPush(u,JSON.parse(raw));}});
   refreshProfileLabels();}
-async function sbLogin(){sbInit();if(!SB){toast('Sem conexão para sincronizar.');return;}
+async function sbLogin(){sbInit();if(!SB){toast('Sem conexão para entrar.');return;}
   const email=(document.getElementById('auEmail').value||'').trim().toLowerCase();
+  const pass=(document.getElementById('auPass')?document.getElementById('auPass').value:'')||'';
   if(!email||email.indexOf('@')<1){toast('Digite um e-mail válido.');return;}
-  document.getElementById('auBtn').textContent='enviando…';document.getElementById('auBtn').disabled=true;
-  const redir=window.location.href.split('#')[0].split('?')[0];
-  const r=await SB.auth.signInWithOtp({email:email,options:{emailRedirectTo:redir}});
+  if(!pass){toast('Digite a senha.');return;}
+  const _b=document.getElementById('auBtn');if(_b){_b.textContent='entrando…';_b.disabled=true;}
+  const r=await SB.auth.signInWithPassword({email:email,password:pass});
   if(r.error){toast('Falha: '+r.error.message);renderAuthBar();return;}
-  document.getElementById('authbar').innerHTML='<div style="font-size:.92rem">📧 Link enviado para <b>'+email+'</b>.</div><div style="font-size:.8rem;color:var(--txt-soft);margin-top:6px">Abra o e-mail <b>neste mesmo aparelho</b> e clique no link — você volta pra cá já conectado. Repita o passo no celular pra sincronizar lá também.</div>';}
+  SB_USER=r.data.user;try{await sbPull();}catch(e){}renderAuthBar();toast('Conectado: '+SB_USER.email);}
 async function sbLogout(){if(SB){try{await SB.auth.signOut();}catch(e){}}SB_USER=null;renderAuthBar();toast('Saiu da sincronização.');}
 function renderAuthBar(){const el=document.getElementById('authbar');if(!el)return;
   if(!window.supabase){el.innerHTML='<div style="font-size:.78rem;color:var(--txt-soft)">Sincronização indisponível offline.</div>';return;}
   if(SB_USER){el.innerHTML='<div style="font-size:.88rem;color:var(--ok);font-weight:700">✓ Sincronizando — '+SB_USER.email+'</div><div style="font-size:.78rem;color:var(--txt-soft);margin:2px 0 10px">Mesmo progresso no Mac e no celular.</div><button class="next-btn ghost" onclick="sbLogout()">Sair da conta</button>';}
-  else{el.innerHTML='<div style="font-size:.86rem;font-weight:700;margin-bottom:2px">🔄 Sincronizar Mac ↔ celular</div><div style="font-size:.78rem;color:var(--txt-soft);margin-bottom:10px">Receba um link no e-mail (sem senha). Opcional — sem login, o progresso fica só neste aparelho.</div>'+
-    '<input id="auEmail" type="email" autocapitalize="off" autocorrect="off" placeholder="seu e-mail" style="width:100%;padding:12px;border:2px solid var(--linha);border-radius:11px;background:var(--card);color:var(--txt);font-size:.98rem;font-family:inherit;margin-bottom:10px">'+
-    '<button class="next-btn" id="auBtn" onclick="sbLogin()">Enviar link de acesso</button>';}}
+  else{el.innerHTML='<div style="font-size:.86rem;font-weight:700;margin-bottom:2px">🔐 Entrar na sua conta</div><div style="font-size:.78rem;color:var(--txt-soft);margin-bottom:10px">E-mail e senha. Sem login, o progresso fica só neste aparelho.</div>'+
+    '<input id="auEmail" type="email" autocapitalize="off" autocorrect="off" placeholder="seu e-mail" style="width:100%;padding:12px;border:2px solid var(--linha);border-radius:11px;background:var(--card);color:var(--txt);font-size:.98rem;font-family:inherit;margin-bottom:8px">'+
+    '<input id="auPass" type="password" autocomplete="current-password" placeholder="senha" style="width:100%;padding:12px;border:2px solid var(--linha);border-radius:11px;background:var(--card);color:var(--txt);font-size:.98rem;font-family:inherit;margin-bottom:10px">'+
+    '<button class="next-btn" id="auBtn" onclick="sbLogin()">Entrar</button>';}}
 async function sbBoot(){if(!sbInit()){ensureReset();renderAuthBar();return;}try{const s=await SB.auth.getSession();if(s&&s.data&&s.data.session){SB_USER=s.data.session.user;await sbPull();}}catch(e){}ensureReset();renderAuthBar();}
 
 ET_AUDIO.refresh();refreshProfileLabels();show('profile');sbBoot();
