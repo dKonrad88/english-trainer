@@ -187,6 +187,7 @@
       <div class="profile-card" onclick="selectProfile('diego')"><div class="av" style="background:#185FA5">🏃</div><div class="pn">Diego</div><div class="ps" id="psDiego"></div></div>
       <div class="profile-card" onclick="selectProfile('debora')"><div class="av" style="background:#9b5de5">💜</div><div class="pn">Débora</div><div class="ps" id="psDebora"></div></div>
     </div>
+    <div id="authbar" style="margin-top:18px;border-top:1px solid var(--linha);padding-top:14px"></div>
   </section>
 
   <!-- HOME -->
@@ -235,6 +236,7 @@
 <script src="data/test.js"></script>
 <script src="data/spelling.js"></script>
 <script src="engine/srs.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ===== TEMA ===== */
 const themeBtn=document.getElementById('themeBtn');
@@ -251,7 +253,7 @@ function bandFor(lvl){if(lvl==='B2')return['B2','C1'];if(lvl==='C1')return['C1',
 function dataKey(u){return 'et_data_'+u;}
 function defaultData(u){return {level:PROFILES[u].lvl,band:bandFor(PROFILES[u].lvl),settings:{cadence:'daily',newPerSession:5,maxReview:20,useMp3:true,theme:'mixed',voice:'us_female',includeExpr:true},srs:{},sessions:[],streak:{current:0,longest:0,last:null},tests:[]};}
 function loadData(u){try{const d=JSON.parse(localStorage.getItem(dataKey(u)));return d?Object.assign(defaultData(u),d):defaultData(u);}catch(e){return defaultData(u);}}
-function saveData(u,o){localStorage.setItem(dataKey(u),JSON.stringify(o));}
+function saveData(u,o){localStorage.setItem(dataKey(u),JSON.stringify(o));localStorage.setItem('et_ts_'+u,String(Date.now()));sbPush(u,o);}
 
 function refreshProfileLabels(){['diego','debora'].forEach(u=>{const d=loadData(u);const el=document.getElementById('ps'+u.charAt(0).toUpperCase()+u.slice(1));
   const cards=Object.values(d.srs||{});if(!cards.length){el.textContent='Nível '+d.level+' · começar';return;}
@@ -673,7 +675,37 @@ document.getElementById('sessBody').addEventListener('click',function(e){
   if(e.target.classList.contains('tr-toggle')){const tx=e.target.parentElement.querySelector('.tr-text');if(tx)tx.classList.remove('hidden');e.target.classList.add('hidden');}
   else if(e.target.classList.contains('btr-toggle')){const tx=e.target.parentElement.querySelector('.btr-text');if(tx)tx.classList.remove('hidden');e.target.classList.add('hidden');}
 });
-ET_AUDIO.refresh();refreshProfileLabels();show('profile');
+/* ===== SYNC (Supabase: login por e-mail + sincronização Mac<->celular) ===== */
+const SB_URL='https://jlouesrrmqeauzlgvrpw.supabase.co';
+const SB_KEY='sb_publishable_ulG1woVG1p1Seax63GGYPQ_PG6-8l-G';
+let SB=null,SB_USER=null;
+function sbInit(){if(!SB&&window.supabase){try{SB=window.supabase.createClient(SB_URL,SB_KEY);}catch(e){SB=null;}}return SB;}
+function sbPush(u,o){if(SB&&SB_USER){SB.from('et_progress').upsert({user_id:SB_USER.id,profile:u,data:o,updated_at:new Date().toISOString()}).then(function(){},function(){});}}
+async function sbPull(){if(!SB||!SB_USER)return;
+  const res=await SB.from('et_progress').select('profile,data,updated_at').eq('user_id',SB_USER.id);
+  if(res.error||!res.data)return;const remote={};res.data.forEach(function(r){remote[r.profile]=r;});
+  ['diego','debora'].forEach(function(u){const r=remote[u];const lt=Number(localStorage.getItem('et_ts_'+u)||0);const raw=localStorage.getItem(dataKey(u));
+    if(r){const rt=Date.parse(r.updated_at);if(rt>lt){localStorage.setItem(dataKey(u),JSON.stringify(r.data));localStorage.setItem('et_ts_'+u,String(rt));}else if(raw&&lt>rt){sbPush(u,JSON.parse(raw));}}
+    else if(raw){sbPush(u,JSON.parse(raw));}});
+  refreshProfileLabels();}
+async function sbLogin(){sbInit();if(!SB){toast('Sem conexão para sincronizar.');return;}
+  const email=(document.getElementById('auEmail').value||'').trim().toLowerCase();
+  if(!email||email.indexOf('@')<1){toast('Digite um e-mail válido.');return;}
+  document.getElementById('auBtn').textContent='enviando…';document.getElementById('auBtn').disabled=true;
+  const redir=window.location.href.split('#')[0].split('?')[0];
+  const r=await SB.auth.signInWithOtp({email:email,options:{emailRedirectTo:redir}});
+  if(r.error){toast('Falha: '+r.error.message);renderAuthBar();return;}
+  document.getElementById('authbar').innerHTML='<div style="font-size:.92rem">📧 Link enviado para <b>'+email+'</b>.</div><div style="font-size:.8rem;color:var(--txt-soft);margin-top:6px">Abra o e-mail <b>neste mesmo aparelho</b> e clique no link — você volta pra cá já conectado. Repita o passo no celular pra sincronizar lá também.</div>';}
+async function sbLogout(){if(SB){try{await SB.auth.signOut();}catch(e){}}SB_USER=null;renderAuthBar();toast('Saiu da sincronização.');}
+function renderAuthBar(){const el=document.getElementById('authbar');if(!el)return;
+  if(!window.supabase){el.innerHTML='<div style="font-size:.78rem;color:var(--txt-soft)">Sincronização indisponível offline.</div>';return;}
+  if(SB_USER){el.innerHTML='<div style="font-size:.88rem;color:var(--ok);font-weight:700">✓ Sincronizando — '+SB_USER.email+'</div><div style="font-size:.78rem;color:var(--txt-soft);margin:2px 0 10px">Mesmo progresso no Mac e no celular.</div><button class="next-btn ghost" onclick="sbLogout()">Sair da conta</button>';}
+  else{el.innerHTML='<div style="font-size:.86rem;font-weight:700;margin-bottom:2px">🔄 Sincronizar Mac ↔ celular</div><div style="font-size:.78rem;color:var(--txt-soft);margin-bottom:10px">Receba um link no e-mail (sem senha). Opcional — sem login, o progresso fica só neste aparelho.</div>'+
+    '<input id="auEmail" type="email" autocapitalize="off" autocorrect="off" placeholder="seu e-mail" style="width:100%;padding:12px;border:2px solid var(--linha);border-radius:11px;background:var(--card);color:var(--txt);font-size:.98rem;font-family:inherit;margin-bottom:10px">'+
+    '<button class="next-btn" id="auBtn" onclick="sbLogin()">Enviar link de acesso</button>';}}
+async function sbBoot(){if(!sbInit()){renderAuthBar();return;}try{const s=await SB.auth.getSession();if(s&&s.data&&s.data.session){SB_USER=s.data.session.user;await sbPull();}}catch(e){}renderAuthBar();}
+
+ET_AUDIO.refresh();refreshProfileLabels();show('profile');sbBoot();
 </script>
 </body>
 </html>
