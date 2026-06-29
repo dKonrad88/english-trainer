@@ -25,11 +25,17 @@
     --linha:#243443; --sombra:0 1px 2px rgba(0,0,0,.28);
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Inter',sans-serif;
-    background:var(--bg);color:var(--txt);line-height:1.55;-webkit-font-smoothing:antialiased;
-    transition:background .25s,color .25s;-webkit-text-size-adjust:100%}
+  html,body{height:100%}
+  body{font-family:'Inter',sans-serif;color:var(--txt);line-height:1.55;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;
+    background:radial-gradient(900px 600px at 50% -10%,rgba(255,255,255,.04),transparent 60%),radial-gradient(700px 500px at 100% 110%,rgba(255,255,255,.025),transparent 55%),#161513;
+    display:flex;align-items:center;justify-content:center;padding:14px;transition:color .2s}
+  /* moldura de celular (padrão da suíte): mockup no desktop, tela cheia no celular/PWA */
+  .phone{width:min(100%,392px);height:min(94vh,840px);background:var(--bg);border-radius:38px;border:1px solid rgba(255,255,255,.08);overflow:hidden;display:flex;flex-direction:column;position:relative;box-shadow:0 0 0 8px #05080f,0 30px 70px rgba(0,0,0,.6),0 6px 18px rgba(0,0,0,.5);transition:background .25s}
+  @media (max-width:480px),(display-mode:standalone){body{display:block;padding:0;background:var(--bg)}.phone{width:100%;max-width:none;height:100dvh;border:0;border-radius:0;box-shadow:none}}
+  body.standalone{display:block;padding:0;background:var(--bg)}
+  body.standalone .phone{width:100%;max-width:none;height:100dvh;border:0;border-radius:0;box-shadow:none}
   header{background:linear-gradient(135deg,#0d3d6b,#185FA5 55%,#1a7a8a);
-    color:#fff;padding:20px 18px 24px;width:100%}
+    color:#fff;padding:20px 18px 24px;width:100%;flex-shrink:0}
   .head-in{max-width:780px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
   header h1{font-size:1.2rem;font-weight:700;letter-spacing:-.3px}
   header p{opacity:.9;font-size:.84rem;margin-top:3px}
@@ -41,7 +47,8 @@
   .user-pill .sw{font-size:.7rem;opacity:.8}
   .theme-btn{background:rgba(255,255,255,.16);border:none;color:#fff;width:38px;height:38px;border-radius:11px;font-size:1.05rem;line-height:1;cursor:pointer;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;padding:0;transition:background .2s}
   .theme-btn:hover{background:rgba(255,255,255,.28)}
-  main{max-width:780px;margin:0 auto;padding:20px 16px 60px}
+  main{flex:1;overflow-y:auto;width:100%;padding:18px 14px 40px;scrollbar-width:none}
+  main::-webkit-scrollbar{display:none}
   .card{background:var(--card);border:1px solid var(--linha);border-radius:var(--radius);box-shadow:var(--sombra);padding:22px 20px;margin-bottom:16px}
   .progress-wrap{height:8px;background:var(--linha);border-radius:99px;overflow:hidden;margin:16px 0 6px}
   .progress-bar{height:100%;background:linear-gradient(90deg,var(--azul-2),var(--azul-3));width:0;transition:width .35s ease;border-radius:99px}
@@ -175,12 +182,13 @@
   .evo-line{display:flex;justify-content:space-between;font-size:.9rem;padding:8px 0;border-bottom:1px solid var(--linha)}
   .evo-line:last-child{border:none} .evo-line b{color:var(--azul-2)} [data-theme="dark"] .evo-line b{color:#7db8e8}
   .hidden{display:none}
-  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--azul-1);color:#fff;padding:12px 20px;border-radius:12px;font-size:.9rem;box-shadow:var(--sombra);opacity:0;transition:all .3s;z-index:99}
+  .toast{position:absolute;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--azul-1);color:#fff;padding:12px 20px;border-radius:12px;font-size:.9rem;box-shadow:var(--sombra);opacity:0;transition:all .3s;z-index:99}
   .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
   @media(max-width:480px){.q-text{font-size:1.04rem}.res-level{font-size:2.6rem}}
 </style>
 </head>
 <body>
+<div class="phone">
 <header>
   <div class="head-in">
     <div><h1>🎯 Treino de Inglês</h1><p>C1–C2 · modo foco · viagem &amp; conversa</p></div>
@@ -239,6 +247,7 @@
 </main>
 
 <div class="toast" id="toast"></div>
+</div><!-- /.phone -->
 
 <script src="data/content.js"></script>
 <script src="data/conversations.js"></script>
@@ -270,7 +279,7 @@ function resetProgress(){if(!confirm('Recomeçar do zero? Isso apaga seu progres
 function refreshProfileLabels(){}
 function enterApp(){currentUser=ME;var cb=document.getElementById('cfgBtn');if(cb)cb.style.display='flex';renderHome();show('home');window.scrollTo(0,0);}
 function showLogin(){var cb=document.getElementById('cfgBtn');if(cb)cb.style.display='none';if('speechSynthesis' in window)speechSynthesis.cancel();S=null;T=null;renderAuthBar();show('profile');window.scrollTo(0,0);}
-function show(id){['profile','home','session','done','test','testresult','evolution','games','menu','config','themes'].forEach(s=>document.getElementById(s).classList.toggle('hidden',s!==id));}
+function show(id){['profile','home','session','done','test','testresult','evolution','games','menu','config','themes'].forEach(s=>document.getElementById(s).classList.toggle('hidden',s!==id));var _m=document.querySelector('main');if(_m)_m.scrollTop=0;}
 
 /* ===== ÁUDIO (MP3 estático -> Web Speech) ===== */
 const VOICE_LABEL={uk_male:'🇬🇧 ♂',uk_female:'🇬🇧 ♀',us_male:'🇺🇸 ♂',us_female:'🇺🇸 ♀'};
@@ -466,7 +475,7 @@ function blockDone(){const today=S.today;let correct=0;const resched=[];
   document.getElementById('done').innerHTML='<div class="card"><div class="badge" style="display:block;text-align:center">ESTUDO CONCLUÍDO</div><div class="res-level">'+correct+'/'+S.items.length+'</div><div class="res-sub">'+pct+'% no quiz · 🔥 streak '+st.current+'</div></div>'+
     '<div class="card"><h3 style="font-size:1.02rem;margin-bottom:10px">📅 Reagendado pela memória</h3>'+rows+'</div>'+
     '<div class="card"><div class="btn-row"><button class="next-btn ghost" onclick="goEvolution()">📈 Evolução</button><button class="next-btn" onclick="(function(){show(\'home\');renderHome();})()">Voltar</button></div></div>';
-  S=null;show('done');window.scrollTo({top:0,behavior:'smooth'});}
+  S=null;show('done');document.querySelector('main').scrollTop=0;}
 
 /* ===== TESTE DE NÍVEL ===== */
 function startTest(){show('test');renderTestIntro();}
@@ -514,10 +523,10 @@ function finishTest(){const stat={};LEVELS.forEach(l=>stat[l]={c:0,t:0});T.answe
     '<div class="card"><h3 style="font-size:1.02rem;margin-bottom:6px">Desempenho por nível</h3>'+bars+'</div>'+
     (misses?'<div class="card"><h3 style="font-size:1.02rem;margin-bottom:6px">📚 Revisão dos erros (a pegadinha de cada um)</h3>'+misses+'</div>':'')+
     '<div class="card"><p class="q-context">Seu estudo agora puxa itens de <b>'+d.band.join(' e ')+'</b>.</p><div class="btn-row"><button class="next-btn ghost" onclick="startTest()">Refazer</button><button class="next-btn" onclick="(function(){show(\'home\');renderHome();})()">Começar a estudar</button></div></div>';
-  T=null;show('testresult');window.scrollTo({top:0,behavior:'smooth'});}
+  T=null;show('testresult');document.querySelector('main').scrollTop=0;}
 
 /* ===== EVOLUÇÃO ===== */
-function goEvolution(){renderEvolution();show('evolution');window.scrollTo({top:0,behavior:'smooth'});}
+function goEvolution(){renderEvolution();show('evolution');document.querySelector('main').scrollTop=0;}
 function renderEvolution(){const d=loadData(currentUser);const cards=Object.values(d.srs||{});const ms=masteryStats(cards);
   // domínio
   const masteryBar='<div class="stat-row"><div class="stat"><div class="n">'+ms.total+'</div><div class="l">itens vistos</div></div><div class="stat"><div class="n">'+ms.review+'</div><div class="l">em revisão</div></div><div class="stat"><div class="n">'+ms.mature+'</div><div class="l">consolidados</div></div></div>';
@@ -563,7 +572,7 @@ function blockDoneLite(){let c=0,t=0;S.items.forEach(x=>{['listen','produce','qu
   const msg=t?(c+'/'+t+' certos neste treino'):'Treino concluído 👏';
   document.getElementById('done').innerHTML='<div class="card"><div class="badge" style="display:block;text-align:center">TREINO CONCLUÍDO</div><div class="res-level">✓</div><div class="res-sub">'+msg+'</div></div>'+
     '<div class="card"><div class="btn-row"><button class="next-btn ghost" onclick="goMenu()">↩︎ Menu</button><button class="next-btn" onclick="(function(){show(\'home\');renderHome();})()">Início</button></div></div>';
-  S=null;show('done');window.scrollTo({top:0,behavior:'smooth'});}
+  S=null;show('done');document.querySelector('main').scrollTop=0;}
 
 /* ===== JOGO: TRADUÇÃO (escrever) ===== */
 let G=null;
@@ -625,7 +634,7 @@ function transDone(){const pct=Math.round(G.correct/G.n*100);
   document.getElementById('games').innerHTML=
     '<div class="card"><div class="badge" style="display:block;text-align:center">TRADUÇÃO CONCLUÍDA</div><div class="res-level">'+G.correct+'/'+G.n+'</div><div class="res-sub">'+pct+'% (autoavaliado)</div></div>'+
     '<div class="card"><div class="btn-row"><button class="next-btn ghost" onclick="(function(){show(\'home\');renderHome();})()">Voltar</button><button class="next-btn" onclick="startTransGame()">Jogar de novo</button></div></div>';
-  G=null;window.scrollTo({top:0,behavior:'smooth'});}
+  G=null;document.querySelector('main').scrollTop=0;}
 
 /* ===== JOGO: SOLETRAÇÃO ===== */
 let SP=null;
@@ -682,7 +691,7 @@ function spellDone(){const pct=Math.round(SP.correct/SP.n*100);
   document.getElementById('games').innerHTML=
     '<div class="card"><div class="badge" style="display:block;text-align:center">SOLETRAÇÃO CONCLUÍDA</div><div class="res-level">'+SP.correct+'/'+SP.n+'</div><div class="res-sub">'+pct+'% de acerto</div></div>'+
     '<div class="card"><div class="btn-row"><button class="next-btn ghost" onclick="(function(){show(\'home\');renderHome();})()">Voltar</button><button class="next-btn" onclick="startSpellGame()">De novo</button></div></div>';
-  SP=null;window.scrollTo({top:0,behavior:'smooth'});}
+  SP=null;document.querySelector('main').scrollTop=0;}
 
 /* ===== JOGO: ADIVINHA A IMAGEM (produção escrita a partir de ilustração) ===== */
 let PIC=null;
@@ -749,7 +758,7 @@ function picDone(){const max=PIC.n*100;const pct=Math.round(PIC.score/max*100);
   document.getElementById('games').innerHTML=
     '<div class="card"><div class="badge" style="display:block;text-align:center">ADIVINHA A IMAGEM</div><div class="res-level">'+PIC.score+'</div><div class="res-sub">'+PIC.correct+'/'+PIC.n+' certas · '+PIC.nohint+' sem dica · '+pct+'%</div></div>'+
     '<div class="card"><div class="btn-row"><button class="next-btn ghost" onclick="(function(){show(\'home\');renderHome();})()">Voltar</button><button class="next-btn" onclick="startPictureGame()">De novo</button></div></div>';
-  PIC=null;window.scrollTo({top:0,behavior:'smooth'});}
+  PIC=null;document.querySelector('main').scrollTop=0;}
 
 /* ===== BOOT ===== */
 document.getElementById('sessBody').addEventListener('click',function(e){
@@ -788,6 +797,7 @@ function renderAuthBar(){const el=document.getElementById('authbar');if(!el)retu
     '<button class="next-btn" id="auBtn" onclick="sbLogin()">Entrar</button>';}}
 async function sbBoot(){if(!sbInit()){showLogin();return;}try{const s=await SB.auth.getSession();if(s&&s.data&&s.data.session){SB_USER=s.data.session.user;await sbPull();enterApp();return;}}catch(e){}showLogin();}
 
+try{if(window.navigator.standalone===true||(window.matchMedia&&matchMedia('(display-mode:standalone)').matches))document.body.classList.add('standalone');}catch(e){}
 ET_AUDIO.refresh();renderAuthBar();show('profile');sbBoot();
 </script>
 <script>
@@ -818,14 +828,14 @@ function showUpdateBanner() {
   if (document.getElementById('updBanner')) return;
   var b = document.createElement('div');
   b.id = 'updBanner';
-  b.style.cssText = 'position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:99999;background:var(--card,#fff);color:var(--txt,#1d2733);border:2px solid var(--azul-2,#185FA5);box-shadow:0 10px 34px rgba(0,0,0,.28);border-radius:14px;padding:11px 13px;display:flex;align-items:center;gap:12px;font-family:inherit;max-width:92vw';
+  b.style.cssText = 'position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:99999;background:var(--card,#fff);color:var(--txt,#1d2733);border:2px solid var(--azul-2,#185FA5);box-shadow:0 10px 34px rgba(0,0,0,.28);border-radius:14px;padding:11px 13px;display:flex;align-items:center;gap:12px;font-family:inherit;max-width:92vw';
   b.innerHTML = '<span style="font-size:.92rem">✨ Nova versão disponível</span>';
   var btn = document.createElement('button');
   btn.textContent = 'Atualizar';
   btn.style.cssText = 'background:linear-gradient(120deg,var(--azul-1,#0d3d6b),var(--azul-2,#185FA5));color:#fff;border:none;padding:9px 16px;border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0';
   btn.onclick = function () { updateApp(); };
   b.appendChild(btn);
-  document.body.appendChild(b);
+  (document.querySelector('.phone')||document.body).appendChild(b);
 }
 
 // Botão "Atualizar o app": checa versão nova, ativa-a se houver, limpa cache e recarrega.
