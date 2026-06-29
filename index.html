@@ -185,7 +185,7 @@
   <div class="head-in">
     <div><h1>🎯 Treino de Inglês</h1><p>C1–C2 · modo foco · viagem &amp; conversa</p></div>
     <div class="head-right">
-      <div class="user-pill" id="userPill" onclick="switchUser()"><span class="av" id="pillAv"></span><span id="pillName"></span><span class="sw">⇄</span></div>
+      <button class="theme-btn" id="cfgBtn" title="Configurações" onclick="goConfig()" style="display:none">⚙️</button>
       <button class="theme-btn" id="themeBtn" title="Tema claro/escuro">🌙</button>
     </div>
   </div>
@@ -194,13 +194,9 @@
 <main>
   <!-- PERFIL -->
   <section id="profile" class="card">
-    <h2 class="profile-h">Quem vai treinar?</h2>
-    <p class="profile-sub">Cada um tem nível, biblioteca e agenda próprios.</p>
-    <div class="profile-grid">
-      <div class="profile-card" onclick="selectProfile('diego')"><div class="av" style="background:#185FA5">🏃</div><div class="pn">Diego</div><div class="ps" id="psDiego"></div></div>
-      <div class="profile-card" onclick="selectProfile('debora')"><div class="av" style="background:#1a7a8a">💜</div><div class="pn">Débora</div><div class="ps" id="psDebora"></div></div>
-    </div>
-    <div id="authbar" style="margin-top:18px;border-top:1px solid var(--linha);padding-top:14px"></div>
+    <h2 class="profile-h">🎯 Treino de Inglês</h2>
+    <p class="profile-sub">Entre na sua conta pra começar.</p>
+    <div id="authbar"></div>
   </section>
 
   <!-- HOME -->
@@ -259,29 +255,21 @@ setTheme(localStorage.getItem('et_theme')||'dark');
 themeBtn.onclick=()=>setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');
 
 /* ===== PERFIS / DADOS ===== */
-const PROFILES={diego:{name:'Diego',color:'#185FA5',emoji:'🏃',lvl:'B2'},debora:{name:'Débora',color:'#1a7a8a',emoji:'💜',lvl:'C2'}};
+const PROFILES={me:{name:'Você',color:'#185FA5',emoji:'🎯',lvl:'B2'}};
+function acctName(){return (typeof SB_USER!=='undefined'&&SB_USER&&SB_USER.email)?SB_USER.email.split('@')[0]:PROFILES[ME].name;}
 const LEVELS=['B2','C1','C2'];
-let currentUser=null,S=null,T=null;
+const ME='me';let currentUser=ME,S=null,T=null;
 const byId={};ITEMS.forEach(it=>byId[it.id]=it);
 function bandFor(lvl){if(lvl==='B2')return['B2','C1'];if(lvl==='C1')return['C1','C2'];return['C1','C2'];}
 function dataKey(u){return 'et_data_'+u;}
 function defaultData(u){return {level:PROFILES[u].lvl,band:bandFor(PROFILES[u].lvl),settings:{cadence:'daily',newPerSession:5,maxReview:20,useMp3:true,theme:'mixed',voice:'us_female',includeExpr:true,tripDate:null},srs:{},sessions:[],streak:{current:0,longest:0,last:null},tests:[]};}
 function loadData(u){try{const d=JSON.parse(localStorage.getItem(dataKey(u)));return d?Object.assign(defaultData(u),d):defaultData(u);}catch(e){return defaultData(u);}}
 function saveData(u,o){localStorage.setItem(dataKey(u),JSON.stringify(o));localStorage.setItem('et_ts_'+u,String(Date.now()));sbPush(u,o);}
-/* Reset de progresso: bump RESET_ID p/ forçar recomeço (Diego+Débora). Checado após o sync
-   no sbBoot, então não atropela progresso novo já sincronizado por outro aparelho. */
-const RESET_ID='2026-06-28-fresh';
-function ensureReset(){['diego','debora'].forEach(function(u){const d=loadData(u);if(d.resetId!==RESET_ID){const fresh=defaultData(u);fresh.resetId=RESET_ID;saveData(u,fresh);}});refreshProfileLabels();}
-function resetProgress(){if(!confirm('Recomeçar do zero? Isso apaga o progresso deste perfil (teste, revisões, streak). Não dá pra desfazer.'))return;const u=currentUser;const fresh=defaultData(u);fresh.resetId=RESET_ID;saveData(u,fresh);toast('Progresso zerado. Bom recomeço! ✨');show('home');renderHome();}
+function resetProgress(){if(!confirm('Recomeçar do zero? Isso apaga seu progresso (teste, revisões, streak). Não dá pra desfazer.'))return;const fresh=defaultData(currentUser);saveData(currentUser,fresh);toast('Progresso zerado. Bom recomeço! ✨');show('home');renderHome();}
 
-function refreshProfileLabels(){['diego','debora'].forEach(u=>{const d=loadData(u);const el=document.getElementById('ps'+u.charAt(0).toUpperCase()+u.slice(1));
-  const cards=Object.values(d.srs||{});if(!cards.length){el.textContent='Nível '+d.level+' · começar';return;}
-  el.textContent='Nível '+d.level+' · '+cards.length+' itens';});}
-function selectProfile(u){currentUser=u;document.getElementById('userPill').style.display='flex';
-  document.getElementById('pillAv').textContent=PROFILES[u].emoji;document.getElementById('pillName').textContent=PROFILES[u].name;
-  renderHome();show('home');}
-function switchUser(){if('speechSynthesis' in window)speechSynthesis.cancel();currentUser=null;S=null;T=null;
-  document.getElementById('userPill').style.display='none';refreshProfileLabels();show('profile');}
+function refreshProfileLabels(){}
+function enterApp(){currentUser=ME;var cb=document.getElementById('cfgBtn');if(cb)cb.style.display='flex';renderHome();show('home');window.scrollTo(0,0);}
+function showLogin(){var cb=document.getElementById('cfgBtn');if(cb)cb.style.display='none';if('speechSynthesis' in window)speechSynthesis.cancel();S=null;T=null;renderAuthBar();show('profile');window.scrollTo(0,0);}
 function show(id){['profile','home','session','done','test','testresult','evolution','games','menu','config','themes'].forEach(s=>document.getElementById(s).classList.toggle('hidden',s!==id));}
 
 /* ===== ÁUDIO (MP3 estático -> Web Speech) ===== */
@@ -323,7 +311,7 @@ function renderHome(){const d=loadData(currentUser);const today=todayISO();const
   const tileHtml=tiles.map(t=>'<button class="tile" onclick="'+t[3]+'"><div class="tic">'+t[0]+'</div><div class="tl">'+t[1]+'</div><div class="td">'+t[2]+'</div></button>').join('');
   document.getElementById('home').innerHTML=
     '<div class="card hero"><div class="av-big" style="background:'+PROFILES[currentUser].color+'">'+PROFILES[currentUser].emoji+'</div>'+
-    '<div class="hname">Olá, '+PROFILES[currentUser].name+'</div><div class="hlvl">Nível '+d.level+' · estuda '+d.band.join(' e ')+'</div>'+
+    '<div class="hname">Olá, '+acctName()+'</div><div class="hlvl">Nível '+d.level+' · estuda '+d.band.join(' e ')+'</div>'+
     '<div class="hero-stats"><div class="hstat"><div class="n">'+due+'</div><div class="l">revisar hoje</div></div>'+
     '<div class="hstat"><div class="n">🔥 '+((d.streak&&d.streak.current)||0)+'</div><div class="l">streak</div></div>'+
     '<div class="hstat"><div class="n">'+ms.mature+'</div><div class="l">dominados</div></div></div></div>'+
@@ -331,6 +319,8 @@ function renderHome(){const d=loadData(currentUser);const today=todayISO();const
 function goConfig(){renderConfig();show('config');}
 function renderConfig(){const d=loadData(currentUser);
   document.getElementById('config').innerHTML=
+    '<div class="card"><div class="set-h" style="margin-top:0">👤 Conta</div>'+(SB_USER?('<p class="q-context" style="margin:2px 0 10px">Conectado: <b>'+SB_USER.email+'</b></p><button class="next-btn ghost" onclick="sbLogout()">Sair</button>'):('<p class="q-context" style="margin:2px 0 10px">Você não está conectado.</p><button class="next-btn" onclick="showLogin()">Entrar</button>'))+'</div>'+
+    '<div class="card"><div class="set-h" style="margin-top:0">🌙 Tema</div><p class="q-context" style="margin:2px 0 10px">Claro ou escuro.</p><button class="next-btn ghost" onclick="setTheme(document.documentElement.getAttribute(\'data-theme\')===\'dark\'?\'light\':\'dark\')">Alternar tema</button></div>'+
     '<div class="card"><div class="q-text">⚙️ Ajustes</div>'+
     '<div class="set-h">Cadência</div><div class="seg" id="segCad"></div>'+
     '<div class="set-h">Itens novos por sessão</div><div class="seg" id="segNew"></div>'+
@@ -339,7 +329,7 @@ function renderConfig(){const d=loadData(currentUser);
     '<div class="toggle-row"><div><div class="tl">Incluir gírias &amp; expressões</div><div class="td">Desligue pra estudar só o básico (colocações, phrasal verbs).</div></div><div class="sw-toggle" id="exprToggle" onclick="toggleExpr()"><div class="dot"></div></div></div></div>'+
     '<div class="card"><div class="set-h" style="margin-top:0">📲 App</div><p class="q-context" style="margin:2px 0 12px">Versão instalada: <b>'+(window.APP_BUILD||'—')+'</b>. Toque pra puxar a versão mais nova do servidor (limpa o cache e recarrega).</p><button class="next-btn ghost" onclick="updateApp()">🔄 Atualizar o app</button></div>'+
     '<div class="card"><div class="set-h" style="margin-top:0">🌴 Viagem a Orlando</div><p class="q-context" style="margin:2px 0 10px">Defina a data pra ver a contagem regressiva na Home.</p><input type="date" id="tripDate" value="'+(d.settings.tripDate||'')+'" style="width:100%;padding:12px;border:2px solid var(--linha);border-radius:11px;background:var(--card);color:var(--txt);font-size:1rem;font-family:inherit"></div>'+
-    '<div class="card"><div class="set-h" style="margin-top:0">♻️ Recomeçar</div><p class="q-context" style="margin:2px 0 10px">Zera o progresso DESTE perfil (teste, revisões, streak) e começa do zero.</p><button class="next-btn ghost" style="color:var(--erro);border-color:var(--erro)" onclick="resetProgress()">Recomeçar do zero</button></div>'+
+    '<div class="card"><div class="set-h" style="margin-top:0">♻️ Recomeçar</div><p class="q-context" style="margin:2px 0 10px">Zera o seu progresso (teste, revisões, streak) e começa do zero.</p><button class="next-btn ghost" style="color:var(--erro);border-color:var(--erro)" onclick="resetProgress()">Recomeçar do zero</button></div>'+
     '<div class="card"><button class="next-btn" onclick="(function(){show(\'home\');renderHome();})()">Pronto</button></div>';
   const cad=[['daily','Diário'],['every2','A cada 2 dias'],['weekly','Semanal']];
   document.getElementById('segCad').innerHTML=cad.map(c=>'<button class="'+(d.settings.cadence===c[0]?'on':'')+'" data-c="'+c[0]+'">'+c[1]+'</button>').join('');
@@ -541,7 +531,7 @@ function renderEvolution(){const d=loadData(currentUser);const cards=Object.valu
   const tc={};cards.forEach(c=>{const it=byId[c.itemId];if(it){tc[it.theme]=(tc[it.theme]||0)+1;}});
   const themeRows=THEMES.map(t=>'<div class="evo-line"><span>'+t.pt+'</span><span><b>'+(tc[t.key]||0)+'</b>/'+t.count+'</span></div>').join('');
   document.getElementById('evolution').innerHTML=
-    '<div class="card"><div class="home-hi">📈 Evolução · '+PROFILES[currentUser].name+'</div><div class="home-lvl">Nível atual: <b>'+d.level+'</b> · 🔥 streak '+((d.streak&&d.streak.current)||0)+' · '+(d.sessions||[]).length+' sessões</div>'+masteryBar+'</div>'+
+    '<div class="card"><div class="home-hi">📈 Evolução · '+acctName()+'</div><div class="home-lvl">Nível atual: <b>'+d.level+'</b> · 🔥 streak '+((d.streak&&d.streak.current)||0)+' · '+(d.sessions||[]).length+' sessões</div>'+masteryBar+'</div>'+
     '<div class="card"><h3 style="font-size:1.02rem;margin-bottom:6px">Acerto recente</h3>'+spark+'</div>'+
     '<div class="card"><h3 style="font-size:1.02rem;margin-bottom:6px">📝 Nível ao longo do tempo</h3>'+tline+'<button class="next-btn ghost" style="margin-top:10px" onclick="startTest()">Fazer/refazer teste</button></div>'+
     '<div class="card"><h3 style="font-size:1.02rem;margin-bottom:6px">Itens por tema</h3>'+themeRows+'</div>'+
@@ -775,7 +765,7 @@ function sbPush(u,o){if(SB&&SB_USER){SB.from('et_progress').upsert({user_id:SB_U
 async function sbPull(){if(!SB||!SB_USER)return;
   const res=await SB.from('et_progress').select('profile,data,updated_at').eq('user_id',SB_USER.id);
   if(res.error||!res.data)return;const remote={};res.data.forEach(function(r){remote[r.profile]=r;});
-  ['diego','debora'].forEach(function(u){const r=remote[u];const lt=Number(localStorage.getItem('et_ts_'+u)||0);const raw=localStorage.getItem(dataKey(u));
+  [ME].forEach(function(u){const r=remote[u];const lt=Number(localStorage.getItem('et_ts_'+u)||0);const raw=localStorage.getItem(dataKey(u));
     if(r){const rt=Date.parse(r.updated_at);if(rt>lt){localStorage.setItem(dataKey(u),JSON.stringify(r.data));localStorage.setItem('et_ts_'+u,String(rt));}else if(raw&&lt>rt){sbPush(u,JSON.parse(raw));}}
     else if(raw){sbPush(u,JSON.parse(raw));}});
   refreshProfileLabels();}
@@ -787,18 +777,18 @@ async function sbLogin(){sbInit();if(!SB){toast('Sem conexão para entrar.');ret
   const _b=document.getElementById('auBtn');if(_b){_b.textContent='entrando…';_b.disabled=true;}
   const r=await SB.auth.signInWithPassword({email:email,password:pass});
   if(r.error){toast('Falha: '+r.error.message);renderAuthBar();return;}
-  SB_USER=r.data.user;try{await sbPull();}catch(e){}renderAuthBar();toast('Conectado: '+SB_USER.email);}
-async function sbLogout(){if(SB){try{await SB.auth.signOut();}catch(e){}}SB_USER=null;renderAuthBar();toast('Saiu da sincronização.');}
+  SB_USER=r.data.user;try{localStorage.removeItem(dataKey(ME));localStorage.removeItem('et_ts_'+ME);}catch(e){}try{await sbPull();}catch(e){}toast('Conectado: '+SB_USER.email);enterApp();}
+async function sbLogout(){if(SB){try{await SB.auth.signOut();}catch(e){}}SB_USER=null;try{localStorage.removeItem(dataKey(ME));localStorage.removeItem('et_ts_'+ME);}catch(e){}toast('Você saiu.');showLogin();}
 function renderAuthBar(){const el=document.getElementById('authbar');if(!el)return;
   if(!window.supabase){el.innerHTML='<div style="font-size:.78rem;color:var(--txt-soft)">Sincronização indisponível offline.</div>';return;}
   if(SB_USER){el.innerHTML='<div style="font-size:.88rem;color:var(--ok);font-weight:700">✓ Sincronizando — '+SB_USER.email+'</div><div style="font-size:.78rem;color:var(--txt-soft);margin:2px 0 10px">Mesmo progresso no Mac e no celular.</div><button class="next-btn ghost" onclick="sbLogout()">Sair da conta</button>';}
-  else{el.innerHTML='<div style="font-size:.86rem;font-weight:700;margin-bottom:2px">🔐 Entrar na sua conta</div><div style="font-size:.78rem;color:var(--txt-soft);margin-bottom:10px">E-mail e senha. Sem login, o progresso fica só neste aparelho.</div>'+
+  else{el.innerHTML='<div style="font-size:.86rem;font-weight:700;margin-bottom:2px">🔐 Entrar na sua conta</div><div style="font-size:.78rem;color:var(--txt-soft);margin-bottom:10px">Use o mesmo e-mail e senha no Mac e no celular pra sincronizar.</div>'+
     '<input id="auEmail" type="email" autocapitalize="off" autocorrect="off" placeholder="seu e-mail" style="width:100%;padding:12px;border:2px solid var(--linha);border-radius:11px;background:var(--card);color:var(--txt);font-size:.98rem;font-family:inherit;margin-bottom:8px">'+
     '<input id="auPass" type="password" autocomplete="current-password" placeholder="senha" style="width:100%;padding:12px;border:2px solid var(--linha);border-radius:11px;background:var(--card);color:var(--txt);font-size:.98rem;font-family:inherit;margin-bottom:10px">'+
     '<button class="next-btn" id="auBtn" onclick="sbLogin()">Entrar</button>';}}
-async function sbBoot(){if(!sbInit()){ensureReset();renderAuthBar();return;}try{const s=await SB.auth.getSession();if(s&&s.data&&s.data.session){SB_USER=s.data.session.user;await sbPull();}}catch(e){}ensureReset();renderAuthBar();}
+async function sbBoot(){if(!sbInit()){showLogin();return;}try{const s=await SB.auth.getSession();if(s&&s.data&&s.data.session){SB_USER=s.data.session.user;await sbPull();enterApp();return;}}catch(e){}showLogin();}
 
-ET_AUDIO.refresh();refreshProfileLabels();show('profile');sbBoot();
+ET_AUDIO.refresh();renderAuthBar();show('profile');sbBoot();
 </script>
 <script>
 /* PWA: versão do app, registro do service worker e atualização sob demanda. */
